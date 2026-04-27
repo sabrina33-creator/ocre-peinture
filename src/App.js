@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import Malek from "./Malek.jpeg";
+import photopeinture from "./photopeinture.jpg";
+import photopeinture1 from "./photopeinture1.jpg"
+import salon2 from "./salon2.jpg"
+import salonnetflix from "./salonnetflix.png"
+import remise from "./remise.jpg"
+import hero from "./hero.jpg"
 /* ═══════════════════════════════════════
    OCRÉ — Site Complet
    Peinture Professionnelle · Aquitaine
@@ -20,19 +26,18 @@ const C = {
 
 const PHONE = "tel:+33782674494";           // ← Remplacer par le vrai numéro de Malek
 const PHONE_DISPLAY = "+33 6 82 67 44 94";  // ← Remplacer par le vrai numéro de Malek
-const EMAIL = "contact@ocre-peinture.fr";   // ← Remplacer par le vrai email de Malek
+const EMAIL = "ocre.peinture.aquitaine@gmail.com";   // ← Remplacer par le vrai email de Malek
 
 const IMG = {
-  hero:       "https://images.unsplash.com/photo-1562184552-997c461abbe6?w=1200&q=80",
-  interieur:  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80",
-  exterieur:  "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80",
+  hero:       hero,
+  interieur:  salon2,
+  exterieur:  photopeinture1,
   pro:        "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
-  renovation: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-  chantier:   "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
-  detail:     "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80",
-  aquitaine:  "https://images.unsplash.com/photo-1573455494060-c5595004fb6c?w=900&q=80",
+  renovation: remise,
+  chantier:    Malek,
+  detail:     salonnetflix,
+  aquitaine:  photopeinture,
 };
-
 // ── Animation scroll ──
 function FadeIn({ children, delay = 0, style = {} }) {
   const [v, setV] = useState(false);
@@ -276,7 +281,7 @@ function PageAccueil({ setPage }) {
             Pas d'intermédiaire.<br/><span style={{ color: C.terra, fontStyle: "italic" }}>C'est lui qui fait le travail.</span>
           </h2>
           <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 16 }}>
-            Artisan peintre indépendant depuis plus de 10 ans, Malek intervient lui-même sur chaque chantier. Vous échangez avec lui directement — du premier devis à la dernière couche de peinture.
+            Artisan peintre indépendant depuis plus de 10 ans, Malek intervient lui-même sur chaque chantier. Vous échangez avec lui directement, du premier devis à la dernière couche de peinture.
           </p>
           <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 28 }}>
             Aucune sous-traitance. Aucune surprise. Une seule exigence : que vous soyez fier du résultat.
@@ -367,7 +372,7 @@ function PageServices({ setPage }) {
       icon: <Ico.Home s={32}/>,
       title: "Peinture intérieure",
       subtitle: "Particuliers & copropriétés",
-      img: IMG.interieur,
+      img: IMG.detail,
       items: ["Murs et plafonds toutes surfaces","Boiseries, plinthes, huisseries","Enduits décoratifs et effets matière","Mise en peinture complète après rénovation","Rafraîchissement locatif entre deux locataires"],
       desc: "Du studio à la villa, Malek prend en charge toute la préparation des surfaces, les protections et la mise en peinture. Finition soignée garantie.",
     },
@@ -575,8 +580,8 @@ function PageContact() {
             </div>
           </div>
 
-          <div style={{ borderRadius: 20, overflow: "hidden" }}>
-            <img src={IMG.aquitaine} alt="Aquitaine" style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}/>
+          <div style={{ borderRadius: 16, overflow: "hidden" }}>
+            <img src={IMG.aquitaine} alt="Aquitaine" style={{ width: "100%", height: 320, objectFit: "cover", display: "block" }}/>
           </div>
         </FadeIn>
       </div>
