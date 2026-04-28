@@ -458,10 +458,8 @@ function PageServices({ setPage }) {
 
 // ══════════ PAGE CONTACT ══════════
 function PageContact() {
-  const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ prenom: "", nom: "", telephone: "", email: "", ville: "", typeChantier: "", surface: "", message: "", photos: null });
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-  const handleSubmit = (e) => { e.preventDefault(); setSent(true); };
 
   const inp = { width: "100%", padding: "14px 16px", borderRadius: 10, background: C.warmWhite, border: `1px solid ${C.beige}`, fontSize: 15, color: C.dark, outline: "none" };
   const lab = { display: "block", fontSize: 12, fontWeight: 600, color: C.darkSoft, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.8 };
@@ -476,16 +474,7 @@ function PageContact() {
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,36px)", fontWeight: 700, color: C.dark, marginTop: 10, marginBottom: 8 }}>Décrivez-nous votre <span style={{ color: C.terra, fontStyle: "italic" }}>chantier</span></h2>
           <p style={{ fontSize: 14, color: C.sand, marginBottom: 32 }}>Artisan peintre en Gironde — Malek vous répond sous 48h. Sans engagement.</p>
 
-          {sent ? (
-            <div style={{ background: C.sage, borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 16 }}>✓</div>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, color: C.white, marginBottom: 12 }}>Demande envoyée !</h3>
-              <p style={{ fontSize: 15, color: C.sand, lineHeight: 1.7 }}>Malek vous répond dans les 48h. Si c'est urgent, appelez directement.</p>
-              <Btn href={PHONE} bg={C.terra} style={{ marginTop: 24 }}><Ico.Phone s={15}/> {PHONE_DISPLAY}</Btn>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} name="contact-ocre" data-netlify="true">
-              <input type="hidden" name="form-name" value="contact-ocre" />
+          <form action="https://formspree.io/f/xjgjqdza" method="POST">
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <div><label style={lab}>Prénom</label><input name="prenom" value={form.prenom} onChange={handleChange} placeholder="Votre prénom" style={inp} required/></div>
                 <div><label style={lab}>Nom</label><input name="nom" value={form.nom} onChange={handleChange} placeholder="Votre nom" style={inp}/></div>
@@ -542,7 +531,6 @@ function PageContact() {
                 </button>
               </div>
             </form>
-          )}
         </FadeIn>
 
         {/* COORDONNÉES */}
