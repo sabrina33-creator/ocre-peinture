@@ -484,7 +484,8 @@ function PageContact() {
               <Btn href={PHONE} bg={C.terra} style={{ marginTop: 24 }}><Ico.Phone s={15}/> {PHONE_DISPLAY}</Btn>
             </div>
           ) : (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} name="contact-ocre" data-netlify="true">
+              <input type="hidden" name="form-name" value="contact-ocre" />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <div><label style={lab}>Prénom</label><input name="prenom" value={form.prenom} onChange={handleChange} placeholder="Votre prénom" style={inp} required/></div>
                 <div><label style={lab}>Nom</label><input name="nom" value={form.nom} onChange={handleChange} placeholder="Votre nom" style={inp}/></div>
