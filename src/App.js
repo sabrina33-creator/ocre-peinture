@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useForm } from "@formspree/react";
 import Malek from "./Malek.jpeg";
 import photopeinture from "./photopeinture.jpg";
 import photopeinture1 from "./photopeinture1.jpg"
@@ -458,8 +459,8 @@ function PageServices({ setPage }) {
 
 // ══════════ PAGE CONTACT ══════════
 function PageContact() {
-  const [form, setForm] = useState({ prenom: "", nom: "", telephone: "", email: "", ville: "", typeChantier: "", surface: "", message: "", photos: null });
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const [state, handleSubmit] = useForm("xjgjqdza");
+  const [photos, setPhotos] = useState(null);
 
   const inp = { width: "100%", padding: "14px 16px", borderRadius: 10, background: C.warmWhite, border: `1px solid ${C.beige}`, fontSize: 15, color: C.dark, outline: "none" };
   const lab = { display: "block", fontSize: 12, fontWeight: 600, color: C.darkSoft, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.8 };
@@ -474,22 +475,30 @@ function PageContact() {
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,36px)", fontWeight: 700, color: C.dark, marginTop: 10, marginBottom: 8 }}>Décrivez-nous votre <span style={{ color: C.terra, fontStyle: "italic" }}>chantier</span></h2>
           <p style={{ fontSize: 14, color: C.sand, marginBottom: 32 }}>Artisan peintre en Gironde — Malek vous répond sous 48h. Sans engagement.</p>
 
-          <form action="https://formspree.io/f/xjgjqdza" method="POST">
+          {state.succeeded ? (
+            <div style={{ background: C.sage, borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
+              <div style={{ fontSize: 40, marginBottom: 16 }}>✓</div>
+              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, color: C.white, marginBottom: 12 }}>Demande envoyée !</h3>
+              <p style={{ fontSize: 15, color: C.sand, lineHeight: 1.7 }}>Malek vous répond dans les 48h. Si c'est urgent, appelez directement.</p>
+              <Btn href={PHONE} bg={C.terra} style={{ marginTop: 24 }}><Ico.Phone s={15}/> {PHONE_DISPLAY}</Btn>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <div><label style={lab}>Prénom</label><input name="prenom" value={form.prenom} onChange={handleChange} placeholder="Votre prénom" style={inp} required/></div>
-                <div><label style={lab}>Nom</label><input name="nom" value={form.nom} onChange={handleChange} placeholder="Votre nom" style={inp}/></div>
+                <div><label style={lab}>Prénom</label><input name="prenom" placeholder="Votre prénom" style={inp} required/></div>
+                <div><label style={lab}>Nom</label><input name="nom" placeholder="Votre nom" style={inp}/></div>
               </div>
               <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <div><label style={lab}>Téléphone</label><input name="telephone" value={form.telephone} onChange={handleChange} placeholder="06 xx xx xx xx" style={inp} required/></div>
-                <div><label style={lab}>Email</label><input name="email" value={form.email} onChange={handleChange} placeholder="votre@email.fr" style={inp}/></div>
+                <div><label style={lab}>Téléphone</label><input name="telephone" placeholder="06 xx xx xx xx" style={inp} required/></div>
+                <div><label style={lab}>Email</label><input name="email" placeholder="votre@email.fr" style={inp}/></div>
               </div>
               <div style={{ marginTop: 16 }}>
                 <label style={lab}>Ville</label>
-                <input name="ville" value={form.ville} onChange={handleChange} placeholder="Ex : Bordeaux, Bayonne, Pau..." style={inp}/>
+                <input name="ville" placeholder="Ex : Bordeaux, Bayonne, Pau..." style={inp}/>
               </div>
               <div style={{ marginTop: 16 }}>
                 <label style={lab}>Type de chantier</label>
-                <select name="typeChantier" value={form.typeChantier} onChange={handleChange} style={inp}>
+                <select name="typeChantier" style={inp}>
                   <option value="">Sélectionnez</option>
                   <option>Peinture intérieure — particulier</option>
                   <option>Peinture extérieure / façade</option>
@@ -501,7 +510,7 @@ function PageContact() {
               </div>
               <div style={{ marginTop: 16 }}>
                 <label style={lab}>Surface approximative</label>
-                <select name="surface" value={form.surface} onChange={handleChange} style={inp}>
+                <select name="surface" style={inp}>
                   <option value="">Sélectionnez</option>
                   <option>Moins de 30 m²</option>
                   <option>30 à 60 m²</option>
@@ -513,24 +522,25 @@ function PageContact() {
               </div>
               <div style={{ marginTop: 16 }}>
                 <label style={lab}>Description / précisions</label>
-                <textarea name="message" value={form.message} onChange={handleChange} placeholder="Décrivez votre projet : état des murs, couleurs souhaitées, contraintes, délais..." rows={4} style={{ ...inp, resize: "vertical" }}/>
+                <textarea name="message" placeholder="Décrivez votre projet : état des murs, couleurs souhaitées, contraintes, délais..." rows={4} style={{ ...inp, resize: "vertical" }}/>
               </div>
               <div style={{ marginTop: 16 }}>
                 <label style={lab}>Photos du chantier (optionnel)</label>
                 <div style={{ border: `2px dashed ${C.beige}`, borderRadius: 12, padding: "24px 18px", textAlign: "center", background: C.warmWhite, cursor: "pointer", position: "relative" }}>
-                  <input type="file" multiple accept="image/*" onChange={(e) => setForm({...form, photos: e.target.files})} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer" }}/>
+                  <input type="file" name="photos" multiple accept="image/*" onChange={(e) => setPhotos(e.target.files)} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer" }}/>
                   <div style={{ color: C.terra, marginBottom: 8 }}><Ico.Brush s={28}/></div>
                   <p style={{ fontSize: 14, fontWeight: 600, color: C.dark }}>Cliquez ou glissez vos photos</p>
                   <p style={{ fontSize: 12, color: C.sand, marginTop: 4 }}>JPG, PNG — 5 Mo max</p>
-                  {form.photos && <p style={{ fontSize: 13, color: C.terra, fontWeight: 600, marginTop: 8 }}>{form.photos.length} photo(s) sélectionnée(s)</p>}
+                  {photos && <p style={{ fontSize: 13, color: C.terra, fontWeight: 600, marginTop: 8 }}>{photos.length} photo(s) sélectionnée(s)</p>}
                 </div>
               </div>
               <div style={{ marginTop: 28 }}>
-                <button type="submit" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px", borderRadius: 12, background: C.terra, color: C.white, fontSize: 16, fontWeight: 700, cursor: "pointer", border: "none", boxShadow: `0 4px 20px ${C.terra}40` }}>
-                  <Ico.Mail s={18}/> Envoyer ma demande
+                <button type="submit" disabled={state.submitting} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px", borderRadius: 12, background: C.terra, color: C.white, fontSize: 16, fontWeight: 700, cursor: state.submitting ? "not-allowed" : "pointer", opacity: state.submitting ? 0.7 : 1, border: "none", boxShadow: `0 4px 20px ${C.terra}40` }}>
+                  <Ico.Mail s={18}/> {state.submitting ? "Envoi en cours…" : "Envoyer ma demande"}
                 </button>
               </div>
             </form>
+          )}
         </FadeIn>
 
         {/* COORDONNÉES */}
