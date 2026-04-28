@@ -460,7 +460,6 @@ function PageServices({ setPage }) {
 // ══════════ PAGE CONTACT ══════════
 function PageContact() {
   const [state, handleSubmit] = useForm("xjgjqdza");
-  const [photos, setPhotos] = useState(null);
 
   const inp = { width: "100%", padding: "14px 16px", borderRadius: 10, background: C.warmWhite, border: `1px solid ${C.beige}`, fontSize: 15, color: C.dark, outline: "none" };
   const lab = { display: "block", fontSize: 12, fontWeight: 600, color: C.darkSoft, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.8 };
@@ -523,16 +522,6 @@ function PageContact() {
               <div style={{ marginTop: 16 }}>
                 <label style={lab}>Description / précisions</label>
                 <textarea name="message" placeholder="Décrivez votre projet : état des murs, couleurs souhaitées, contraintes, délais..." rows={4} style={{ ...inp, resize: "vertical" }}/>
-              </div>
-              <div style={{ marginTop: 16 }}>
-                <label style={lab}>Photos du chantier (optionnel)</label>
-                <div style={{ border: `2px dashed ${C.beige}`, borderRadius: 12, padding: "24px 18px", textAlign: "center", background: C.warmWhite, cursor: "pointer", position: "relative" }}>
-                  <input type="file" name="photos" multiple accept="image/*" onChange={(e) => setPhotos(e.target.files)} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer" }}/>
-                  <div style={{ color: C.terra, marginBottom: 8 }}><Ico.Brush s={28}/></div>
-                  <p style={{ fontSize: 14, fontWeight: 600, color: C.dark }}>Cliquez ou glissez vos photos</p>
-                  <p style={{ fontSize: 12, color: C.sand, marginTop: 4 }}>JPG, PNG — 5 Mo max</p>
-                  {photos && <p style={{ fontSize: 13, color: C.terra, fontWeight: 600, marginTop: 8 }}>{photos.length} photo(s) sélectionnée(s)</p>}
-                </div>
               </div>
               <div style={{ marginTop: 28 }}>
                 <button type="submit" disabled={state.submitting} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px", borderRadius: 12, background: C.terra, color: C.white, fontSize: 16, fontWeight: 700, cursor: state.submitting ? "not-allowed" : "pointer", opacity: state.submitting ? 0.7 : 1, border: "none", boxShadow: `0 4px 20px ${C.terra}40` }}>
