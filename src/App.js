@@ -214,12 +214,12 @@ function PageAccueil({ setPage }) {
         </FadeIn>
         <FadeIn delay={0.15}>
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(34px,6vw,58px)", fontWeight: 700, color: C.white, lineHeight: 1.15, marginBottom: 20 }}>
-            Peintre professionnel<br/>en Aquitaine.<br/><span style={{ color: C.terra, fontStyle: "italic" }}>Le travail bien fait.</span>
+            Peintre professionnel<br/>à Bordeaux et en Aquitaine.<br/><span style={{ color: C.terra, fontStyle: "italic" }}>Le travail bien fait.</span>
           </h1>
         </FadeIn>
         <FadeIn delay={0.3}>
           <p style={{ fontSize: 17, color: "rgba(255,255,255,0.85)", lineHeight: 1.7, maxWidth: 500, marginBottom: 36 }}>
-            Particuliers, copropriétés, commerces et chantiers pro. Malek intervient partout en Aquitaine avec rigueur, délais tenus et finitions soignées.
+            Artisan peintre en Gironde depuis plus de 10 ans. Malek intervient pour les particuliers et les professionnels — peinture intérieure, extérieure, ravalement de façade.
           </p>
         </FadeIn>
         <FadeIn delay={0.45}>
@@ -281,7 +281,7 @@ function PageAccueil({ setPage }) {
             Pas d'intermédiaire.<br/><span style={{ color: C.terra, fontStyle: "italic" }}>C'est lui qui fait le travail.</span>
           </h2>
           <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 16 }}>
-            Artisan peintre indépendant depuis plus de 10 ans, Malek intervient lui-même sur chaque chantier. Vous échangez avec lui directement, du premier devis à la dernière couche de peinture.
+            Artisan peintre en Gironde depuis plus de 10 ans, Malek intervient lui-même sur chaque chantier. Du premier devis peinture à Bordeaux à la dernière couche, vous échangez directement avec lui.
           </p>
           <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 28 }}>
             Aucune sous-traitance. Aucune surprise. Une seule exigence : que vous soyez fier du résultat.
@@ -296,14 +296,14 @@ function PageAccueil({ setPage }) {
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <FadeIn><div style={{ textAlign: "center", marginBottom: 56 }}>
           <span style={{ fontSize: 12, color: C.sand, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Ce que fait Malek</span>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: 700, color: C.dark, marginTop: 12 }}>Particuliers et <span style={{ color: C.terra, fontStyle: "italic" }}>professionnels</span></h2>
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: 700, color: C.dark, marginTop: 12 }}>Peinture intérieure, extérieure et <span style={{ color: C.terra, fontStyle: "italic" }}>remise en état</span></h2>
         </div></FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 24 }}>
           {[
-            { icon: <Ico.Home s={28}/>, title: "Peinture intérieure", desc: "Murs, plafonds, boiseries, enduits décoratifs. Rénovation complète ou rafraîchissement." },
-            { icon: <Ico.Sun s={28}/>, title: "Peinture extérieure", desc: "Ravalement de façades, volets, sous-faces. Devis sur site gratuit." },
-            { icon: <Ico.Building s={28}/>, title: "Chantiers pro", desc: "Bureaux, commerces, copropriétés. Intervention planifiée selon vos contraintes." },
-            { icon: <Ico.Brush s={28}/>, title: "Remise en état", desc: "Après sinistre, départ locataire ou travaux. Intervention rapide, résultat net." },
+            { icon: <Ico.Home s={28}/>, title: "Peinture intérieure", desc: "Murs, plafonds, boiseries. Malek assure la peinture intérieure à Bordeaux et dans toute la Gironde, de la préparation aux finitions." },
+            { icon: <Ico.Sun s={28}/>, title: "Peinture extérieure", desc: "Ravalement de façade à Bordeaux et en Aquitaine. Volets, sous-faces, traitement anti-humidité. Devis sur site gratuit." },
+            { icon: <Ico.Building s={28}/>, title: "Chantiers pro", desc: "Bureaux, commerces, copropriétés en Gironde. Intervention planifiée selon vos contraintes, délais tenus." },
+            { icon: <Ico.Brush s={28}/>, title: "Remise en état", desc: "Après sinistre ou départ locataire. Malek intervient rapidement pour une remise en état soignée." },
           ].map((s,i) => (
             <FadeIn key={i} delay={i*0.1}>
               <div style={{ background: C.white, borderRadius: 20, padding: "32px 24px", boxShadow: "0 2px 16px rgba(0,0,0,0.04)", textAlign: "center", height: "100%" }}>
@@ -354,8 +354,8 @@ function PageAccueil({ setPage }) {
     {/* ── CTA FINAL ── */}
     <section style={{ padding: "80px 24px", background: C.sage, textAlign: "center" }}>
       <FadeIn>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,40px)", fontWeight: 700, color: C.white, marginBottom: 16 }}>Votre projet mérite une <span style={{ color: C.terra, fontStyle: "italic" }}>finition parfaite</span></h2>
-        <p style={{ fontSize: 16, color: C.sand, marginBottom: 36, maxWidth: 480, margin: "0 auto 36px" }}>Devis gratuit, réponse sous 48h. Toute l'Aquitaine.</p>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,40px)", fontWeight: 700, color: C.white, marginBottom: 16 }}>Votre chantier mérite un <span style={{ color: C.terra, fontStyle: "italic" }}>artisan peintre sérieux</span></h2>
+        <p style={{ fontSize: 16, color: C.sand, marginBottom: 36, maxWidth: 480, margin: "0 auto 36px" }}>Devis peinture à Bordeaux gratuit — réponse sous 48h — toute l'Aquitaine.</p>
         <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
           <Btn href={PHONE} bg={C.terra} style={{ fontSize: 16, padding: "16px 36px" }}><Ico.Phone s={18}/> Appeler Malek</Btn>
           <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} bg="transparent" border={`2px solid rgba(255,255,255,0.4)`} style={{ fontSize: 16, padding: "14px 36px" }}>Envoyer une demande →</Btn>
@@ -374,7 +374,7 @@ function PageServices({ setPage }) {
       subtitle: "Particuliers & copropriétés",
       img: IMG.detail,
       items: ["Murs et plafonds toutes surfaces","Boiseries, plinthes, huisseries","Enduits décoratifs et effets matière","Mise en peinture complète après rénovation","Rafraîchissement locatif entre deux locataires"],
-      desc: "Du studio à la villa, Malek prend en charge toute la préparation des surfaces, les protections et la mise en peinture. Finition soignée garantie.",
+      desc: "Murs, plafonds, boiseries, enduits décoratifs — Malek assure la peinture intérieure à Bordeaux et dans toute la Gironde. Préparation des surfaces, protections et finitions soignées incluses.",
     },
     {
       icon: <Ico.Sun s={32}/>,
@@ -382,7 +382,7 @@ function PageServices({ setPage }) {
       subtitle: "Façades & ravalement",
       img: IMG.exterieur,
       items: ["Ravalement de façade complet","Peinture de volets et fenêtres","Sous-faces, avant-toits, appuis de fenêtre","Traitement anti-humidité et préparation","Nettoyage haute pression inclus"],
-      desc: "Protéger votre façade, c'est préserver votre bien. Malek intervient avec les matériaux adaptés à chaque support : crépi, bois, béton, aluminium.",
+      desc: "Peintre en bâtiment en Gironde, Malek réalise le ravalement de façade et la peinture extérieure à Bordeaux. Chaque support est traité avec le matériau adapté : crépi, bois, béton, aluminium.",
     },
     {
       icon: <Ico.Building s={32}/>,
@@ -390,7 +390,7 @@ function PageServices({ setPage }) {
       subtitle: "Entreprises & commerces",
       img: IMG.pro,
       items: ["Bureaux et open spaces","Commerces, restaurants, boutiques","Halls et parties communes de copropriété","Entrepôts et locaux industriels","Intervention hors horaires si besoin"],
-      desc: "Malek s'adapte aux contraintes des espaces professionnels : délais serrés, travail en plusieurs phases, respect de votre activité pendant les travaux.",
+      desc: "Artisan peintre en Gironde, Malek intervient pour les professionnels : bureaux, commerces, copropriétés. Délais respectés, travail en plusieurs phases si besoin.",
     },
     {
       icon: <Ico.Brush s={32}/>,
@@ -398,7 +398,7 @@ function PageServices({ setPage }) {
       subtitle: "Rapide et soigné",
       img: IMG.renovation,
       items: ["Remise en état après sinistre (dégât des eaux, incendie)","Sortie de locataire : état des lieux impeccable","Après travaux : raccords et finitions","Retouches ponctuelles","Intervention sous 72h si urgence"],
-      desc: "Un logement à remettre en état rapidement ? Malek intervient avec réactivité pour que votre bien soit de nouveau prêt à être habité ou loué.",
+      desc: "Dégât des eaux, sortie de locataire, fin de chantier — Malek remet votre bien en état rapidement. Résultat propre, prêt à être habité ou mis en location.",
     },
   ];
 
@@ -406,9 +406,9 @@ function PageServices({ setPage }) {
     {/* HERO SERVICES */}
     <section style={{ background: C.sage, padding: "80px 24px 64px", textAlign: "center" }}>
       <FadeIn>
-        <span style={{ fontSize: 12, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Ce que nous faisons</span>
-        <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(30px,5vw,48px)", fontWeight: 700, color: C.white, marginTop: 12, marginBottom: 16 }}>Nos <span style={{ color: C.terra, fontStyle: "italic" }}>prestations</span></h1>
-        <p style={{ fontSize: 16, color: C.sand, maxWidth: 500, margin: "0 auto" }}>Intérieur, extérieur, particuliers ou pros — Malek intervient partout en Aquitaine.</p>
+        <span style={{ fontSize: 12, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Peinture intérieure & extérieure</span>
+        <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(30px,5vw,48px)", fontWeight: 700, color: C.white, marginTop: 12, marginBottom: 16 }}>Peintre en bâtiment <span style={{ color: C.terra, fontStyle: "italic" }}>en Aquitaine</span></h1>
+        <p style={{ fontSize: 16, color: C.sand, maxWidth: 500, margin: "0 auto" }}>Particuliers, professionnels, copropriétés — Malek intervient pour tous types de chantiers en Gironde et dans toute l'Aquitaine.</p>
       </FadeIn>
     </section>
 
@@ -445,7 +445,7 @@ function PageServices({ setPage }) {
     {/* CTA */}
     <section style={{ padding: "80px 24px", background: C.cream, textAlign: "center" }}>
       <FadeIn>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: C.dark, marginBottom: 12 }}>Prêt à lancer votre chantier ?</h2>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: C.dark, marginBottom: 12 }}>Besoin d'un devis peinture à Bordeaux ?</h2>
         <p style={{ fontSize: 16, color: C.darkSoft, marginBottom: 32 }}>Devis gratuit — réponse sous 48h — sans engagement</p>
         <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
           <Btn href={PHONE} bg={C.terra} style={{ fontSize: 16, padding: "16px 36px" }}><Ico.Phone s={18}/> Appeler Malek</Btn>
@@ -474,7 +474,7 @@ function PageContact() {
         <FadeIn style={{ flex: "1 1 460px" }}>
           <span style={{ fontSize: 12, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Devis gratuit</span>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,36px)", fontWeight: 700, color: C.dark, marginTop: 10, marginBottom: 8 }}>Décrivez-nous votre <span style={{ color: C.terra, fontStyle: "italic" }}>chantier</span></h2>
-          <p style={{ fontSize: 14, color: C.sand, marginBottom: 32 }}>Réponse de Malek sous 48h · Sans engagement</p>
+          <p style={{ fontSize: 14, color: C.sand, marginBottom: 32 }}>Artisan peintre en Gironde — Malek vous répond sous 48h. Sans engagement.</p>
 
           {sent ? (
             <div style={{ background: C.sage, borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
