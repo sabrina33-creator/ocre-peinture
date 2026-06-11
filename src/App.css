@@ -1,38 +1,141 @@
-.App {
-  text-align: center;
+:root {
+  --ocre: #C8783A;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #17140F;
+  color: #F0EBE0;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  letter-spacing: 0.012em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-kerning: normal;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  text-wrap: balance;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+button { font-family: inherit; }
+
+img { display: block; max-width: 100%; }
+
+a { color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* ── Responsive ── */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+@media (max-width: 600px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-grid > div { height: 200px !important; }
 }
 
-.App-link {
-  color: #61dafb;
+/* Service detail rows: always column on mobile */
+@media (max-width: 680px) {
+  .service-row { flex-direction: column !important; }
+  .about-img { height: 300px !important; }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Contact 2-col form: stack on small screens */
+@media (max-width: 520px) {
+  .contact-form-row { grid-template-columns: 1fr !important; }
+}
+
+/* Hero: reduce top padding on small screens */
+@media (max-width: 520px) {
+  .hero-content { padding-top: 104px !important; padding-bottom: 60px !important; }
+}
+
+/* ── Focus indicators ── */
+:focus-visible {
+  outline: 2px solid var(--ocre);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Form fields: glow ring instead of outline (outline is removed inline) */
+.form-input:focus-visible {
+  outline: none !important;
+  border-color: var(--ocre) !important;
+  box-shadow: 0 0 0 3px rgba(200, 120, 58, 0.18) !important;
+}
+
+/* ── FadeIn entrance animation ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-anim {
+  animation: fadeInUp 0.55s cubic-bezier(0, 0, 0.2, 1) backwards;
+}
+
+/* Placeholder contrast — passes WCAG AA on #211E19 */
+::placeholder { color: rgba(240, 235, 224, 0.50); }
+
+/* ── Interaction states ── */
+/* Transition for elements without inline transition */
+button { transition: opacity 0.15s ease; }
+
+/* Hover / active feedback (only fires when opacity is not inline) */
+button:hover:not(:disabled) { opacity: 0.82; }
+button:active:not(:disabled) { opacity: 0.68; }
+a:hover { opacity: 0.82; }
+a:active { opacity: 0.68; }
+
+/* ── Section padding: compress on mobile ── */
+@media (max-width: 768px) {
+  .sec-p    { padding-top: 72px !important; padding-bottom: 72px !important; }
+  .sec-p-sm { padding-top: 60px !important; padding-bottom: 60px !important; }
+}
+@media (max-width: 520px) {
+  .sec-p    { padding-top: 52px !important; padding-bottom: 52px !important; }
+  .sec-p-sm { padding-top: 44px !important; padding-bottom: 44px !important; }
+}
+
+/* ── Hero CTAs: stack full-width on narrow mobile ── */
+@media (max-width: 480px) {
+  .hero-ctas { flex-direction: column !important; }
+  .hero-ctas > * { width: 100% !important; box-sizing: border-box !important; }
+}
+
+/* ── App root: suppress phantom bottom pad on desktop ── */
+@media (min-width: 769px) {
+  .app-root { padding-bottom: 0 !important; }
+}
+
+/* ── Valeurs grid: tighter row gap on mobile ── */
+@media (max-width: 768px) {
+  .valeurs-grid { gap: 32px !important; }
+}
+
+/* ── Footer cols: tighter stacking gap on mobile ── */
+@media (max-width: 768px) {
+  .footer-cols { gap: 32px !important; }
 }

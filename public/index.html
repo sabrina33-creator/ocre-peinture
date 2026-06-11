@@ -1,43 +1,231 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="canonical" href="https://ocre-peinture.fr/" />
+    <meta name="theme-color" content="#17140F" />
     <meta
       name="description"
-      content="Ocré, peintre professionnel intervenant chez les particuliers et entreprises dans toute l'Aquitaine. Peinture intérieure, extérieure, ravalement de façade. Devis gratuit sous 48h."
+      content="Malek, artisan peintre en Gironde depuis 10 ans. Peinture intérieure, extérieure, ravalement de façade. Devis gratuit, réponse sous 48h, toute l'Aquitaine."
     />
     <link rel="apple-touch-icon" href="/ocrelogo.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Ocré — Peintre professionnel en Aquitaine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Ocré, peintre professionnel en Aquitaine · Malek</title>
+    <!-- Google Analytics 4 — set REACT_APP_GA_ID=G-XXXXXXXXXX dans .env.local -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQSXYNBXY2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-QQSXYNBXY2', { send_page_view: false });
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+          "@id": "https://ocre-peinture.fr/#business",
+          "name": "Ocré · Peinture Professionnelle",
+          "description": "Malek, artisan peintre professionnel en Gironde depuis plus de 10 ans. Peinture intérieure, extérieure, ravalement de façade, chantiers professionnels. Devis gratuit, réponse sous 48h, toute l'Aquitaine.",
+          "url": "https://ocre-peinture.fr",
+          "telephone": "+33782674494",
+          "email": "ocre.peinture.aquitaine@gmail.com",
+          "image": "https://ocre-peinture.fr/ocrelogo.png",
+          "logo": "https://ocre-peinture.fr/ocrelogo.png",
+          "priceRange": "€€",
+          "openingHours": "Mo Tu We Th Fr Sa 08:00-19:00",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Bordeaux",
+            "addressRegion": "Gironde",
+            "postalCode": "33000",
+            "addressCountry": "FR"
+          },
+          "areaServed": [
+            { "@type": "AdministrativeArea", "name": "Gironde" },
+            { "@type": "AdministrativeArea", "name": "Landes" },
+            { "@type": "AdministrativeArea", "name": "Pyrénées-Atlantiques" },
+            { "@type": "AdministrativeArea", "name": "Lot-et-Garonne" }
+          ],
+          "founder": {
+            "@type": "Person",
+            "name": "Malek"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+33782674494",
+            "contactType": "customer service",
+            "availableLanguage": "French",
+            "hoursAvailable": {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+              "opens": "08:00",
+              "closes": "19:00"
+            }
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Prestations de peinture",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Peinture intérieure",
+                  "description": "Murs, plafonds, boiseries, enduits décoratifs. Préparation des supports et finition soignée pour particuliers et copropriétés."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Peinture extérieure et ravalement de façade",
+                  "description": "Façade, volets, sous-faces. Traitement adapté à chaque support, nettoyage haute pression inclus."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Chantiers professionnels",
+                  "description": "Bureaux, commerces, restaurants, copropriétés. Intervention planifiée selon les contraintes, délais tenus."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Remise en état",
+                  "description": "Après sinistre, départ locataire ou fin de travaux. Intervention rapide, résultat prêt à habiter ou mettre en location."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://ocre-peinture.fr/#website",
+          "name": "Ocré · Peintre Professionnel en Aquitaine",
+          "url": "https://ocre-peinture.fr",
+          "description": "Site de Malek, artisan peintre en Gironde. Peinture intérieure, extérieure, façade. Devis gratuit, réponse sous 48h.",
+          "inLanguage": "fr",
+          "publisher": {
+            "@id": "https://ocre-peinture.fr/#business"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://ocre-peinture.fr/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Malek répond-il rapidement aux demandes de devis ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Oui. Malek répond à chaque demande sous 48h. S'il ne peut pas prendre le chantier, il le dit clairement. Vous pouvez l'appeler au +33 7 82 67 44 94 ou lui écrire sur WhatsApp pour une réponse plus rapide."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Les délais annoncés sont-ils respectés ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Malek donne une date de début et une date de fin au devis, et les tient. En plus de 10 ans d'activité en Gironde, c'est une règle non négociable."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quelle est la qualité des finitions proposées ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Découpes nettes, angles propres, raccords invisibles. Malek ne passe pas à la suite avant que le résultat soit à la hauteur. La finition soignée est incluse dans chaque devis, pas en supplément."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Le chantier est-il nettoyé après l'intervention ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Oui. Bâches, protections, déchets : tout est enlevé. Malek repart quand l'espace est propre et utilisable. C'est inclus dans chaque intervention, sans surcoût."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Dans quelles villes et départements Malek intervient-il ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Malek intervient dans toute l'Aquitaine : Bordeaux et l'agglomération bordelaise, le Bassin d'Arcachon, Bayonne, Pau et Mont-de-Marsan. Départements : Gironde (33), Landes (40), Pyrénées-Atlantiques (64), Lot-et-Garonne (47)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quels types de travaux de peinture Ocré réalise-t-il ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Peinture intérieure (murs, plafonds, boiseries, enduits décoratifs), peinture extérieure et ravalement de façade, chantiers professionnels (bureaux, commerces, copropriétés), remise en état après sinistre ou départ locataire."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Comment obtenir un devis pour des travaux de peinture à Bordeaux ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Appelez Malek au +33 7 82 67 44 94, envoyez un message WhatsApp, ou remplissez le formulaire de devis sur ce site. Réponse garantie sous 48h. Le devis est gratuit et sans engagement."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <main lang="fr" style="font-family:sans-serif;max-width:800px;margin:40px auto;padding:0 24px;color:#17140F;line-height:1.6">
+        <h1>Ocré — Peintre professionnel en Aquitaine · Malek</h1>
+        <p>Malek est artisan peintre en Gironde depuis plus de 10 ans. Il réalise lui-même chaque chantier, sans sous-traitant. Peinture intérieure, extérieure, ravalement de façade, chantiers professionnels, remise en état. Devis gratuit, réponse sous 48h, toute l'Aquitaine.</p>
+
+        <h2>Prestations</h2>
+        <ul>
+          <li><strong>Peinture intérieure</strong> — murs, plafonds, boiseries, enduits décoratifs. Particuliers et copropriétés.</li>
+          <li><strong>Peinture extérieure et ravalement de façade</strong> — façade, volets, sous-faces. Nettoyage haute pression inclus.</li>
+          <li><strong>Chantiers professionnels</strong> — bureaux, commerces, restaurants, parties communes. Délais tenus.</li>
+          <li><strong>Remise en état</strong> — après sinistre, départ locataire, fin de travaux. Intervention rapide sous 72h si urgence.</li>
+        </ul>
+
+        <h2>Zone d'intervention</h2>
+        <p>Bordeaux et agglomération · Bassin d'Arcachon · Bayonne · Pau · Mont-de-Marsan. Gironde (33), Landes (40), Pyrénées-Atlantiques (64), Lot-et-Garonne (47).</p>
+
+        <h2>Contact</h2>
+        <p>
+          Téléphone / WhatsApp : <a href="tel:+33782674494">+33 7 82 67 44 94</a><br>
+          Email : <a href="mailto:ocre.peinture.aquitaine@gmail.com">ocre.peinture.aquitaine@gmail.com</a><br>
+          Horaires : lundi–samedi, 8h–19h
+        </p>
+
+        <h2>Questions fréquentes</h2>
+        <dl>
+          <dt>Malek répond-il rapidement aux demandes de devis ?</dt>
+          <dd>Oui. Malek répond à chaque demande sous 48h. S'il ne peut pas prendre le chantier, il le dit clairement.</dd>
+          <dt>Les délais annoncés sont-ils respectés ?</dt>
+          <dd>Malek donne une date de début et une date de fin au devis, et les tient. En plus de 10 ans d'activité en Gironde, c'est une règle non négociable.</dd>
+          <dt>Le chantier est-il nettoyé après l'intervention ?</dt>
+          <dd>Oui. Bâches, protections, déchets : tout est enlevé. Malek repart quand l'espace est propre et utilisable. Inclus dans chaque intervention, sans surcoût.</dd>
+          <dt>Dans quelles villes Malek intervient-il ?</dt>
+          <dd>Bordeaux et toute l'agglomération, Bassin d'Arcachon, Bayonne, Pau, Mont-de-Marsan. Gironde, Landes, Pyrénées-Atlantiques, Lot-et-Garonne.</dd>
+        </dl>
+      </main>
+    </noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

@@ -1,129 +1,337 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "@formspree/react";
+import "./App.css";
+import { trackPageView, trackLead } from "./analytics";
 import Malek from "./Malek.jpeg";
 import photopeinture from "./photopeinture.jpg";
-import photopeinture1 from "./photopeinture1.jpg"
-import salon2 from "./salon2.jpg"
-import salonnetflix from "./salonnetflix.png"
-import remise from "./remise.jpg"
-import hero from "./hero.jpg"
+import photopeinture1 from "./photopeinture1.jpg";
+import salon2 from "./salon2.jpg";
+import salonnetflix from "./salonnetflix.png";
+import remise from "./remise.jpg";
+import hero from "./hero.jpg";
+
 /* ═══════════════════════════════════════
-   OCRÉ — Site Complet
-   Peinture Professionnelle · Aquitaine
+   OCRÉ — Peinture Professionnelle · Aquitaine
+   Fonts : Big Shoulders Display (display) + Bricolage Grotesque (body)
    ═══════════════════════════════════════ */
 
 const C = {
-  cream: "#FAF7F2",
-  warmWhite: "#FFFDF9",
-  beige: "#EDE5D8",
-  sand: "#8C8680",
-  terra: "#C4813A",       // Ochre — couleur principale, CTA
-  sage: "#2B3440",        // Slate — logo, nav, boutons sombres
-  sageDark: "#1E2630",
-  dark: "#1A1A1A",
-  darkSoft: "#4A4A48",
-  white: "#FFFFFF",
+  bg:         "#17140F",
+  surface:    "#211E19",
+  surfaceHi:  "#2C2822",
+  ochre:      "#C8783A",
+  ochreDim:   "#A8622E",
+  ochreGlow:  "#E09050",
+  cream:      "#F0EBE0",
+  muted:      "#8D8379",
+  subtle:     "#2E2A24",
+  white:      "#FFFFFF",
 };
 
-const PHONE = "tel:+33782674494";           // ← Remplacer par le vrai numéro de Malek
-const PHONE_DISPLAY = "+33 6 82 67 44 94";  // ← Remplacer par le vrai numéro de Malek
-const EMAIL = "ocre.peinture.aquitaine@gmail.com";   // ← Remplacer par le vrai email de Malek
+const PHONE         = "tel:+33782674494";
+const PHONE_DISPLAY = "+33 7 82 67 44 94";
+const EMAIL         = "ocre.peinture.aquitaine@gmail.com";
+const WHATSAPP      = "https://wa.me/33782674494?text=Bonjour%20Malek%2C%20je%20souhaite%20un%20devis%20pour%20un%20chantier.";
 
 const IMG = {
   hero:       hero,
   interieur:  salon2,
   exterieur:  photopeinture1,
-  pro:        "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
   renovation: remise,
-  chantier:    Malek,
+  chantier:   Malek,
   detail:     salonnetflix,
   aquitaine:  photopeinture,
+  pro:        "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
 };
+
 // ── Animation scroll ──
 function FadeIn({ children, delay = 0, style = {} }) {
-  const [v, setV] = useState(false);
+  const [inView, setInView] = useState(false);
   const ref = useRef();
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.1 });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setInView(true); obs.unobserve(e.target); } },
+      { threshold: 0.08 }
+    );
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
-  return (<div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(24px)", transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`, ...style }}>{children}</div>);
+  return (
+    <div
+      ref={ref}
+      className={inView ? "fade-in-anim" : undefined}
+      style={{ ...(inView && delay > 0 ? { animationDelay: `${delay}s` } : {}), ...style }}
+    >
+      {children}
+    </div>
+  );
 }
 
 // ── Icônes ──
 const Ico = {
-  Phone: ({s=18}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
-  Mail: ({s=18}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
-  Check: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.terra} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-  Pin: ({s=16}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
-  Menu: () => <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
-  X: () => <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-  Brush: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1 1 2.67 2.02 5 2.02 2.8 0 5-2.1 5-4.04 0-1.67-1.33-3.02-3-3.02h-2z"/></svg>,
-  Home: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
-  Building: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="22" x2="9" y2="2"/><line x1="15" y1="22" x2="15" y2="2"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg>,
-  Sun: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>,
-  Sparkle: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>,
-  Clock: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-  Shield: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
-  TrendUp: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
-  AlertCircle: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>,
-  Eye: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
-  Users: ({s=24}) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  Phone: ({ s = 18 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.21 12.8 19.79 19.79 0 0 1 1.13 4.18 2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+    </svg>
+  ),
+  Mail: ({ s = 18 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+      <polyline points="22,6 12,13 2,6"/>
+    </svg>
+  ),
+  Check: ({ s = 18 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={C.ochre} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  ),
+  Pin: ({ s = 16 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+      <circle cx="12" cy="10" r="3"/>
+    </svg>
+  ),
+  Menu: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  ),
+  X: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  ),
+  WhatsApp: ({ s = 18 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    </svg>
+  ),
+  Brush: ({ s = 22 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/>
+      <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1 1 2.67 2.02 5 2.02 2.8 0 5-2.1 5-4.04 0-1.67-1.33-3.02-3-3.02h-2z"/>
+    </svg>
+  ),
+  Home: ({ s = 22 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  ),
+  Building: ({ s = 22 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="4" y="2" width="16" height="20" rx="2"/>
+      <path d="M9 22V12h6v10M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01"/>
+    </svg>
+  ),
+  Sun: ({ s = 22 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  ),
+  Clock: ({ s = 22 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+  ),
+  Shield: ({ s = 22 }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+  ),
 };
 
-// ── Logo Ocré ──
+// ── Logo ──
 function OcreLogo({ size = 36 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="10" fill={C.sage}/>
-      <text x="20" y="28" fontFamily="Georgia, 'Times New Roman', serif" fontSize="22"
-            fontWeight="900" textAnchor="middle" fill="white">O</text>
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <rect width="40" height="40" rx="9" fill={C.ochre}/>
+      <text x="20" y="29" fontFamily="'Big Shoulders Display', Arial, sans-serif" fontSize="26" fontWeight="900" textAnchor="middle" fill={C.white}>O</text>
     </svg>
   );
 }
 
-// ── Bouton CTA ──
-function Btn({ href, onClick, children, bg, color = C.white, border, style = {} }) {
-  const base = { display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 28px", borderRadius: 12, fontSize: 15, fontWeight: 600, fontFamily: "'DM Sans',sans-serif", cursor: "pointer", transition: "transform 0.2s, opacity 0.2s", background: bg || C.terra, color, border: border || "none", boxShadow: `0 2px 12px ${(bg || C.terra)}40`, textDecoration: "none", ...style };
-  if (href) return <a href={href} style={base}>{children}</a>;
-  return <div onClick={onClick} style={base}>{children}</div>;
+// ── Boutons sémantiques ──
+function Btn({ href, onClick, children, variant = "primary", style = {}, loc }) {
+  const base = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    padding: "13px 22px",
+    borderRadius: 10,
+    fontSize: 14,
+    fontWeight: 600,
+    fontFamily: "'Bricolage Grotesque', sans-serif",
+    cursor: "pointer",
+    transition: "opacity 0.15s cubic-bezier(0,0,0.2,1), transform 0.15s cubic-bezier(0,0,0.2,1)",
+    textDecoration: "none",
+    border: "none",
+    minHeight: 44,
+    letterSpacing: "0.01em",
+    lineHeight: 1,
+  };
+  const variants = {
+    primary:   { background: C.ochre,    color: C.white,  boxShadow: `0 2px 14px ${C.ochre}35` },
+    whatsapp:  { background: "#25D366",  color: C.white,  boxShadow: "0 2px 14px rgba(37,211,102,0.28)" },
+    ghost:     { background: "rgba(255,255,255,0.08)", color: C.cream, border: "1.5px solid rgba(255,255,255,0.18)" },
+    secondary: { background: "transparent", color: C.muted, border: `1.5px solid ${C.subtle}` },
+    light:     { background: C.white,    color: C.ochre },
+  };
+  const finalStyle = { ...base, ...variants[variant], ...style };
+
+  const handleClick = () => {
+    if (loc) {
+      if (href?.startsWith("tel:"))     trackLead("phone",    loc);
+      else if (href?.includes("wa.me")) trackLead("whatsapp", loc);
+      else                              trackLead("devis",    loc);
+    }
+    if (onClick) onClick();
+  };
+
+  if (href) {
+    const isExternal = href.startsWith("http");
+    return (
+      <a
+        href={href}
+        onClick={loc ? handleClick : undefined}
+        style={finalStyle}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <button onClick={handleClick} style={finalStyle}>
+      {children}
+    </button>
+  );
 }
 
 // ══════════ HEADER ══════════
 function Header({ page, setPage }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  useEffect(() => { const h = () => setScrolled(window.scrollY > 50); window.addEventListener("scroll", h); return () => window.removeEventListener("scroll", h); }, []);
+
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", h, { passive: true });
+    return () => window.removeEventListener("scroll", h);
+  }, []);
+
   const goTo = (p) => { setPage(p); setMenuOpen(false); window.scrollTo({ top: 0 }); };
-  const links = [{ id: "accueil", label: "Accueil" }, { id: "services", label: "Services" }, { id: "contact", label: "Devis" }];
+  const links = [
+    { id: "accueil",  label: "Accueil"  },
+    { id: "services", label: "Services" },
+    { id: "contact",  label: "Devis"    },
+  ];
+  const transparent = page === "accueil" && !scrolled;
 
   return (
-    <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: (scrolled || page !== "accueil") ? "rgba(250,247,242,0.97)" : "transparent", backdropFilter: (scrolled || page !== "accueil") ? "blur(14px)" : "none", borderBottom: (scrolled || page !== "accueil") ? `1px solid ${C.beige}` : "1px solid transparent", transition: "all 0.4s" }}>
-      <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
-        <div onClick={() => goTo("accueil")} style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
-          <OcreLogo size={38}/>
+    <header style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
+      background: transparent ? "transparent" : `${C.bg}F2`,
+      backdropFilter: transparent ? "none" : "blur(18px)",
+      borderBottom: transparent ? "1px solid transparent" : `1px solid ${C.subtle}`,
+      transition: "all 0.35s",
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
+
+        <button
+          onClick={() => goTo("accueil")}
+          aria-label="Ocré — retour à l'accueil"
+          style={{ display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", cursor: "pointer", padding: "4px 0", minHeight: 44 }}
+        >
+          <OcreLogo size={34}/>
           <div>
-            <span style={{ fontFamily: "'Playfair Display',serif", fontSize: 26, fontWeight: 700, color: (scrolled || page !== "accueil") ? C.dark : C.white, letterSpacing: "-0.5px", transition: "color 0.4s" }}>Ocré</span>
-            <div style={{ fontSize: 9, color: (scrolled || page !== "accueil") ? C.sand : "rgba(255,255,255,0.7)", letterSpacing: 1.5, fontWeight: 500, marginTop: -2, textTransform: "uppercase", transition: "color 0.4s" }}>Peinture · Aquitaine</div>
+            <div style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 21, fontWeight: 700, color: C.cream, lineHeight: 1 }}>Ocré</div>
+            <div style={{ fontSize: 9, color: C.muted, letterSpacing: 2, fontWeight: 500, textTransform: "uppercase", marginTop: 2 }}>Peinture · Aquitaine</div>
           </div>
-        </div>
-        <nav className="nav-desktop" style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          {links.map(n => (<span key={n.id} onClick={() => goTo(n.id)} style={{ fontSize: 14, fontWeight: 500, cursor: "pointer", color: page === n.id ? C.terra : ((scrolled || page !== "accueil") ? C.darkSoft : "rgba(255,255,255,0.85)"), borderBottom: page === n.id ? `2px solid ${C.terra}` : "2px solid transparent", paddingBottom: 4, transition: "all 0.3s" }}>{n.label}</span>))}
-          <Btn href={PHONE} bg={C.terra} style={{ padding: "10px 20px", fontSize: 13 }}><Ico.Phone s={15}/> Appeler Malek</Btn>
+        </button>
+
+        <nav className="nav-desktop" style={{ display: "flex", alignItems: "center", gap: 24 }} aria-label="Navigation principale">
+          {links.map(n => (
+            <button
+              key={n.id}
+              onClick={() => goTo(n.id)}
+              aria-current={page === n.id ? "page" : undefined}
+              style={{
+                fontSize: 14, fontWeight: 500, cursor: "pointer", background: "none", border: "none",
+                color: page === n.id ? C.ochre : C.muted,
+                borderBottom: page === n.id ? `1.5px solid ${C.ochre}` : "1.5px solid transparent",
+                padding: "4px 0", fontFamily: "'Bricolage Grotesque', sans-serif",
+                transition: "color 0.2s", minHeight: 44,
+              }}
+            >
+              {n.label}
+            </button>
+          ))}
+          <Btn href={WHATSAPP} variant="whatsapp" style={{ padding: "9px 16px", fontSize: 13 }} loc="header">
+            <Ico.WhatsApp s={14}/> WhatsApp
+          </Btn>
+          <Btn href={PHONE} variant="primary" style={{ padding: "9px 16px", fontSize: 13 }} loc="header">
+            <Ico.Phone s={14}/> Appeler
+          </Btn>
         </nav>
-        <div className="nav-burger" style={{ display: "none", cursor: "pointer", color: (scrolled || page !== "accueil") ? C.dark : C.white }} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <Ico.X/> : <Ico.Menu/>}</div>
+
+        <button
+          className="nav-burger"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-expanded={menuOpen}
+          style={{ display: "none", background: "none", border: "none", cursor: "pointer", color: C.cream, padding: 4, minHeight: 44, minWidth: 44, alignItems: "center", justifyContent: "center" }}
+        >
+          {menuOpen ? <Ico.X/> : <Ico.Menu/>}
+        </button>
       </div>
+
       {menuOpen && (
-        <div style={{ position: "fixed", top: 72, left: 0, right: 0, bottom: 0, background: C.cream, padding: "40px 24px", zIndex: 999, display: "flex", flexDirection: "column", gap: 28 }}>
-          {links.map(n => (<span key={n.id} onClick={() => goTo(n.id)} style={{ fontFamily: "'Playfair Display',serif", fontSize: 30, fontWeight: 600, color: page === n.id ? C.terra : C.dark, cursor: "pointer" }}>{n.label}</span>))}
-          <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-            <Btn href={PHONE} bg={C.sage} style={{ flex: 1, justifyContent: "center", padding: 16 }}><Ico.Phone s={15}/> Appeler</Btn>
-            <Btn onClick={() => goTo("contact")} bg={C.terra} style={{ flex: 1, justifyContent: "center", padding: 16 }}><Ico.Mail s={15}/> Devis gratuit</Btn>
+        <div style={{ position: "fixed", top: 68, left: 0, right: 0, bottom: 0, background: C.bg, padding: "48px 28px", zIndex: 999, display: "flex", flexDirection: "column" }}>
+          {links.map(n => (
+            <button
+              key={n.id}
+              onClick={() => goTo(n.id)}
+              style={{
+                fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 38, fontWeight: 700,
+                color: page === n.id ? C.ochre : C.cream,
+                background: "none", border: "none", cursor: "pointer",
+                padding: "10px 0", textAlign: "left", minHeight: 60,
+              }}
+            >
+              {n.label}
+            </button>
+          ))}
+          <div style={{ marginTop: 36, display: "flex", flexDirection: "column", gap: 10 }}>
+            <Btn href={WHATSAPP} variant="whatsapp" style={{ width: "100%", padding: 15, fontSize: 15 }} loc="nav_mobile">
+              <Ico.WhatsApp s={18}/> Écrire sur WhatsApp
+            </Btn>
+            <Btn href={PHONE} variant="primary" style={{ width: "100%", padding: 15, fontSize: 15 }} loc="nav_mobile">
+              <Ico.Phone s={18}/> Appeler Malek
+            </Btn>
+            <Btn onClick={() => goTo("contact")} variant="secondary" style={{ width: "100%", padding: 15, fontSize: 15 }} loc="nav_mobile">
+              <Ico.Mail s={18}/> Demander un devis
+            </Btn>
           </div>
         </div>
       )}
-      <style>{`@media(max-width:768px){.nav-desktop{display:none!important}.nav-burger{display:block!important}}`}</style>
+
+      <style>{`
+        @media(max-width:768px){
+          .nav-desktop{display:none!important}
+          .nav-burger{display:flex!important}
+        }
+      `}</style>
     </header>
   );
 }
@@ -131,13 +339,29 @@ function Header({ page, setPage }) {
 // ══════════ STICKY CTA MOBILE ══════════
 function StickyCTA({ setPage }) {
   return (
-    <div>
-      <div className="sticky-cta" style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 999, background: "rgba(250,247,242,0.97)", backdropFilter: "blur(12px)", borderTop: `1px solid ${C.beige}`, padding: "10px 16px", display: "none", gap: 10 }}>
-        <Btn href={PHONE} bg={C.sage} style={{ flex: 1, justifyContent: "center", padding: "13px 6px", fontSize: 14, borderRadius: 10 }}><Ico.Phone s={15}/> Appeler</Btn>
-        <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} bg={C.terra} style={{ flex: 1, justifyContent: "center", padding: "13px 6px", fontSize: 14, borderRadius: 10 }}><Ico.Mail s={15}/> Devis gratuit</Btn>
+    <>
+      <div
+        className="sticky-cta"
+        style={{
+          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 999,
+          background: `${C.bg}F5`, backdropFilter: "blur(16px)",
+          borderTop: `1px solid ${C.subtle}`, padding: "10px 14px",
+          paddingBottom: "calc(10px + env(safe-area-inset-bottom))",
+          display: "none", gap: 8,
+        }}
+      >
+        <Btn href={PHONE} variant="primary" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9 }} loc="sticky">
+          <Ico.Phone s={14}/> Appeler
+        </Btn>
+        <Btn href={WHATSAPP} variant="whatsapp" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9 }} loc="sticky">
+          <Ico.WhatsApp s={14}/> WhatsApp
+        </Btn>
+        <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9, border: `1.5px solid ${C.subtle}` }} loc="sticky">
+          <Ico.Mail s={14}/> Devis
+        </Btn>
       </div>
       <style>{`@media(max-width:768px){.sticky-cta{display:flex!important}}`}</style>
-    </div>
+    </>
   );
 }
 
@@ -145,32 +369,51 @@ function StickyCTA({ setPage }) {
 function Footer({ setPage }) {
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0 }); };
   return (
-    <footer style={{ background: C.sage, padding: "64px 24px 32px" }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 48, marginBottom: 48 }}>
+    <footer style={{ background: C.surface, borderTop: `1px solid ${C.subtle}`, padding: "64px 24px 40px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <div className="footer-cols" style={{ display: "flex", flexWrap: "wrap", gap: 48, marginBottom: 48 }}>
           <div style={{ flex: "1 1 280px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-              <OcreLogo size={32}/>
-              <span style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, fontWeight: 700, color: C.cream }}>Ocré</span>
+              <OcreLogo size={30}/>
+              <span style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 20, fontWeight: 700, color: C.cream }}>Ocré</span>
             </div>
-            <p style={{ fontSize: 14, lineHeight: 1.7, color: C.sand, maxWidth: 300 }}>Peintre professionnel en Aquitaine. Particuliers et entreprises. Le travail bien fait, chaque fois.</p>
+            <p style={{ fontSize: 14, lineHeight: 1.7, color: C.muted, maxWidth: 280 }}>
+              Peintre professionnel en Aquitaine. Malek intervient lui-même, du devis à la finition.
+            </p>
           </div>
-          <div style={{ flex: "1 1 140px" }}>
-            <h4 style={{ fontSize: 12, fontWeight: 700, color: C.cream, letterSpacing: 1.5, marginBottom: 18, textTransform: "uppercase" }}>Navigation</h4>
-            {["accueil","services","contact"].map(p => (<div key={p} onClick={() => goTo(p)} style={{ fontSize: 14, color: C.sand, cursor: "pointer", marginBottom: 12, textTransform: p === "contact" ? "none" : "capitalize" }}>{p === "contact" ? "Devis gratuit" : p.charAt(0).toUpperCase()+p.slice(1)}</div>))}
-          </div>
+          <nav aria-label="Navigation secondaire" style={{ flex: "1 1 140px" }}>
+            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.muted, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Navigation</h4>
+            {[["accueil","Accueil"],["services","Services"],["contact","Devis gratuit"]].map(([p, label]) => (
+              <button
+                key={p}
+                onClick={() => goTo(p)}
+                style={{ display: "block", fontSize: 14, color: C.muted, cursor: "pointer", marginBottom: 10, background: "none", border: "none", padding: "4px 0", textAlign: "left", minHeight: 44 }}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
           <div style={{ flex: "1 1 200px" }}>
-            <h4 style={{ fontSize: 12, fontWeight: 700, color: C.cream, letterSpacing: 1.5, marginBottom: 18, textTransform: "uppercase" }}>Contact</h4>
-            <p style={{ fontSize: 14, color: C.sand, lineHeight: 2 }}>Toute l'Aquitaine<br/>{PHONE_DISPLAY}<br/>{EMAIL}</p>
+            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.muted, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Contact</h4>
+            <p style={{ fontSize: 14, color: C.muted, lineHeight: 2.2 }}>
+              Toute l'Aquitaine<br/>
+              <a href={PHONE} onClick={() => trackLead("phone", "footer")} style={{ color: C.cream, textDecoration: "none" }}>{PHONE_DISPLAY}</a><br/>
+              <a href={"mailto:"+EMAIL} style={{ color: C.muted, textDecoration: "none", fontSize: 12 }}>{EMAIL}</a>
+            </p>
           </div>
-          <div style={{ flex: "1 1 200px" }}>
-            <h4 style={{ fontSize: 12, fontWeight: 700, color: C.cream, letterSpacing: 1.5, marginBottom: 18, textTransform: "uppercase" }}>Zones</h4>
-            <p style={{ fontSize: 14, color: C.sand, lineHeight: 2 }}>Bordeaux & agglo<br/>Bassin d'Arcachon<br/>Bayonne · Pau<br/>Mont-de-Marsan</p>
+          <div style={{ flex: "1 1 180px" }}>
+            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.muted, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Zones</h4>
+            <p style={{ fontSize: 14, color: C.muted, lineHeight: 2.2 }}>
+              Bordeaux & agglo<br/>
+              Bassin d'Arcachon<br/>
+              Bayonne · Pau<br/>
+              Mont-de-Marsan
+            </p>
           </div>
         </div>
-        <div style={{ borderTop: "1px solid rgba(140,134,128,0.2)", paddingTop: 24, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: 12, color: "rgba(140,134,128,0.5)" }}>
-          <span>© 2026 Ocré — Peinture Aquitaine</span>
-          <span>Assurance décennale · SIRET en cours</span>
+        <div style={{ borderTop: `1px solid ${C.subtle}`, paddingTop: 24, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: 12, color: C.muted }}>
+          <span>© 2026 Ocré · Peinture Aquitaine</span>
+          <span>Artisan assuré · SIRET en cours</span>
         </div>
       </div>
     </footer>
@@ -180,413 +423,620 @@ function Footer({ setPage }) {
 // ══════════ PAGE ACCUEIL ══════════
 function PageAccueil({ setPage }) {
   const problemes = [
-    { icon: <Ico.Clock s={24}/>, title: "L'artisan qui ne rappelle pas", desc: "Vous avez demandé 3 devis, personne ne vous a répondu. Chez Ocré, réponse garantie sous 48h." },
-    { icon: <Ico.AlertCircle s={24}/>, title: "Des délais non tenus", desc: "Le chantier devait durer une semaine, il en a duré trois. Malek s'engage sur des dates et les respecte." },
-    { icon: <Ico.Eye s={24}/>, title: "Des finitions bâclées", desc: "Traces de pinceau, découpes imprécises, murs striés. Une finition soignée, ça se voit — et ça se négocie pas." },
-    { icon: <Ico.Shield s={24}/>, title: "Un chantier laissé sale", desc: "Protection des meubles, nettoyage après travaux. Malek part quand tout est propre, pas avant." },
+    {
+      title: "L'artisan qui disparaît",
+      desc: "Vous avez demandé trois devis. Deux n'ont jamais répondu. Malek répond sous 48h, ou il refuse le chantier clairement.",
+    },
+    {
+      title: "La semaine qui dure un mois",
+      desc: "Cinq jours annoncés. Dix-huit jours plus tard, il était encore là. Malek donne une date et la tient.",
+    },
+    {
+      title: "Les murs qu'on regarde de côté",
+      desc: "Traces de pinceau, découpes approximatives, retouches qui se voient. Une finition soignée ne se négocie pas.",
+    },
+    {
+      title: "Le chantier laissé en état",
+      desc: "Meubles non protégés, poussière dans toutes les pièces. Malek repart quand tout est propre. Bâches, sol, déchets : il emmène tout.",
+    },
   ];
 
   const valeurs = [
-    { icon: <Ico.Clock s={28}/>, title: "Ponctualité", desc: "Présent à l'heure prévue. Chantier livré dans les délais convenus." },
-    { icon: <Ico.Sparkle s={28}/>, title: "Finition soignée", desc: "Découpes propres, angles nets, surfaces lisses. Pas de compromis sur la qualité." },
-    { icon: <Ico.Shield s={28}/>, title: "Propreté du chantier", desc: "Bâches, protections, nettoyage final inclus. Vous retrouvez votre espace impeccable." },
-    { icon: <Ico.TrendUp s={28}/>, title: "Devis transparent", desc: "Prix clair, sans surprise. Ce qui est écrit est ce qui est facturé." },
+    { icon: <Ico.Clock s={22}/>,  title: "Ponctualité",       desc: "Il arrive à l'heure convenue. Le chantier se termine à la date annoncée au devis." },
+    { icon: <Ico.Brush s={22}/>,  title: "Finition soignée",  desc: "Découpes nettes, angles propres. Malek ne passe pas à la suite tant que c'est pas bon." },
+    { icon: <Ico.Shield s={22}/>, title: "Propreté",          desc: "Bâches, protections, nettoyage final. Vous retrouvez votre espace impeccable." },
+    { icon: <Ico.Check s={22}/>,  title: "Devis transparent", desc: "Ce qui est écrit est ce qui est facturé. Aucune surprise après signature." },
   ];
 
-  const stats = [
-    { num: "+200", label: "chantiers réalisés" },
-    { num: "10 ans", label: "d'expérience" },
-    { num: "4 dép.", label: "d'intervention" },
-    { num: "48h", label: "pour un devis" },
-  ];
+  return (
+    <div>
+      {/* ── HERO ── */}
+      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0 }}>
+          <img
+            src={IMG.hero}
+            alt="Malek au travail, artisan peintre en Aquitaine"
+            fetchPriority="high"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(108deg, ${C.bg}EC 0%, ${C.bg}A8 55%, ${C.bg}38 100%)` }}/>
+        </div>
 
-  return (<div>
-    {/* ── HERO ── */}
-    <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", inset: 0 }}>
-        <img src={IMG.hero} alt="Chantier peinture professionnel" style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(27,32,40,0.82) 0%, rgba(27,32,40,0.5) 60%, rgba(27,32,40,0.2) 100%)" }}/>
-      </div>
-      <div style={{ maxWidth: 700, margin: "0 auto", padding: "120px 24px 80px", position: "relative", zIndex: 1 }}>
-        <FadeIn>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)", padding: "8px 20px", borderRadius: 50, marginBottom: 28, border: "1px solid rgba(255,255,255,0.2)" }}>
-            <Ico.Pin s={14}/><span style={{ fontSize: 12, color: C.white, fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase" }}>Aquitaine — Gironde · Landes · Béarn · Pays Basque</span>
-          </div>
-        </FadeIn>
-        <FadeIn delay={0.15}>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(34px,6vw,58px)", fontWeight: 700, color: C.white, lineHeight: 1.15, marginBottom: 20 }}>
-            Peintre professionnel<br/>à Bordeaux et en Aquitaine.<br/><span style={{ color: C.terra, fontStyle: "italic" }}>Le travail bien fait.</span>
-          </h1>
-        </FadeIn>
-        <FadeIn delay={0.3}>
-          <p style={{ fontSize: 17, color: "rgba(255,255,255,0.85)", lineHeight: 1.7, maxWidth: 500, marginBottom: 36 }}>
-            Artisan peintre en Gironde depuis plus de 10 ans. Malek intervient pour les particuliers et les professionnels — peinture intérieure, extérieure, ravalement de façade.
-          </p>
-        </FadeIn>
-        <FadeIn delay={0.45}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
-            <Btn href={PHONE} bg={C.terra} style={{ fontSize: 16, padding: "16px 32px" }}><Ico.Phone s={18}/> Appeler Malek</Btn>
-            <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} bg="transparent" border={`2px solid rgba(255,255,255,0.5)`} style={{ fontSize: 16, padding: "14px 32px" }}>Devis gratuit →</Btn>
-          </div>
-        </FadeIn>
-        <FadeIn delay={0.6}>
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 16 }}>Réponse garantie sous 48h · Devis gratuit et sans engagement</p>
-        </FadeIn>
-      </div>
-    </section>
-
-    {/* ── STATS ── */}
-    <section style={{ background: C.sage, padding: "48px 24px" }}>
-      <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 32, textAlign: "center" }}>
-        {stats.map((s,i) => (
-          <FadeIn key={i} delay={i*0.1}>
-            <div>
-              <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 36, fontWeight: 700, color: C.terra }}>{s.num}</div>
-              <div style={{ fontSize: 13, color: C.sand, marginTop: 4, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1 }}>{s.label}</div>
+        <div className="hero-content" style={{ maxWidth: 1100, margin: "0 auto", padding: "140px 24px 100px", position: "relative", zIndex: 1, width: "100%" }}>
+          <FadeIn>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `${C.ochre}18`, padding: "7px 16px", borderRadius: 50, marginBottom: 32, border: `1px solid ${C.ochre}28` }}>
+              <Ico.Pin s={13}/>
+              <span style={{ fontSize: 11, color: C.ochreGlow, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Gironde · Landes · Béarn · Pays Basque</span>
             </div>
           </FadeIn>
-        ))}
-      </div>
-    </section>
 
-    {/* ── SECTION PROBLÈMES ── */}
-    <section style={{ padding: "100px 24px", background: C.warmWhite }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <FadeIn><div style={{ textAlign: "center", marginBottom: 56 }}>
-          <span style={{ fontSize: 12, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Vous avez déjà vécu ça ?</span>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: 700, color: C.dark, marginTop: 12 }}>Les problèmes que vous ne <span style={{ color: C.terra, fontStyle: "italic" }}>voulez plus</span> avoir</h2>
-        </div></FadeIn>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: 20 }}>
-          {problemes.map((p,i) => (
-            <FadeIn key={i} delay={i*0.1}><div style={{ background: C.white, borderRadius: 20, padding: "32px 24px", boxShadow: "0 2px 16px rgba(0,0,0,0.04)", borderLeft: `4px solid ${C.terra}30` }}>
-              <div style={{ color: C.terra, marginBottom: 16 }}>{p.icon}</div>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, fontWeight: 600, color: C.dark, marginBottom: 8 }}>{p.title}</h3>
-              <p style={{ fontSize: 14, color: C.darkSoft, lineHeight: 1.6 }}>{p.desc}</p>
-            </div></FadeIn>
-          ))}
+          <FadeIn delay={0.12}>
+            <h1 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(48px, 7.5vw, 88px)", fontWeight: 900, color: C.cream, lineHeight: 1.0, marginBottom: 8, maxWidth: 800, letterSpacing: "-0.02em" }}>
+              Un peintre qui arrive à l'heure.
+            </h1>
+            <p style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(36px, 5.5vw, 68px)", fontWeight: 800, color: C.ochre, lineHeight: 1.1, marginBottom: 32, letterSpacing: "-0.01em" }}>
+              Malek le fait lui-même.
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.26}>
+            <p style={{ fontSize: 17, color: "rgba(240,235,224,0.78)", lineHeight: 1.7, maxWidth: 580, marginBottom: 40 }}>
+              Artisan peintre en Gironde depuis plus de 10 ans. Du devis à la dernière couche, c'est lui, pas un sous-traitant. Réponse garantie sous 48h.
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.4}>
+            <div className="hero-ctas" style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 18 }}>
+              <Btn href={PHONE} variant="primary" style={{ fontSize: 15, padding: "14px 28px" }} loc="hero">
+                <Ico.Phone s={16}/> Appeler Malek
+              </Btn>
+              <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px" }} loc="hero">
+                <Ico.WhatsApp s={16}/> WhatsApp
+              </Btn>
+              <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="ghost" style={{ fontSize: 15, padding: "12px 28px" }} loc="hero">
+                Demander mon devis →
+              </Btn>
+            </div>
+            <p style={{ fontSize: 12, color: "rgba(240,235,224,0.35)" }}>
+              Artisan assuré · Devis gratuit · Sans engagement
+            </p>
+          </FadeIn>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* ── À PROPOS DE MALEK ── */}
-    <section style={{ padding: "100px 24px", background: C.cream }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 48, alignItems: "center" }}>
-        <FadeIn style={{ flex: "1 1 420px" }}>
-          <div style={{ borderRadius: 20, overflow: "hidden" }}>
-            <img src={IMG.chantier} alt="Malek au travail" style={{ width: "100%", height: 420, objectFit: "cover", display: "block" }}/>
+      {/* ── PROBLÈMES ── */}
+      <section className="sec-p" style={{ padding: "120px 24px 96px", background: C.bg }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <FadeIn>
+            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(32px, 5vw, 60px)", fontWeight: 900, color: C.cream, marginBottom: 56, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+              On sait ce qui{" "}
+              <span style={{ color: C.ochre }}>vous agace.</span>
+            </h2>
+          </FadeIn>
+
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {problemes.map((p, i) => (
+              <FadeIn key={i} delay={i * 0.06}>
+                <div style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "16px 56px",
+                  padding: "36px 0",
+                  borderTop: `1px solid ${C.subtle}`,
+                  alignItems: "flex-start",
+                }}>
+                  <h3 style={{
+                    flex: "1 1 280px",
+                    fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif",
+                    fontSize: "clamp(26px, 3.5vw, 42px)",
+                    fontWeight: 900,
+                    color: C.cream,
+                    lineHeight: 1.05,
+                    letterSpacing: "-0.02em",
+                  }}>
+                    {p.title}
+                  </h3>
+                  <p style={{ flex: "1 1 280px", fontSize: 16, color: C.muted, lineHeight: 1.75, paddingTop: 4 }}>
+                    {p.desc}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
+            <div style={{ borderTop: `1px solid ${C.subtle}` }}/>
           </div>
-        </FadeIn>
-        <FadeIn delay={0.2} style={{ flex: "1 1 360px" }}>
-          <span style={{ fontSize: 12, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Qui est Malek ?</span>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,34px)", fontWeight: 700, color: C.dark, lineHeight: 1.25, marginTop: 12, marginBottom: 16 }}>
-            Pas d'intermédiaire.<br/><span style={{ color: C.terra, fontStyle: "italic" }}>C'est lui qui fait le travail.</span>
-          </h2>
-          <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 16 }}>
-            Artisan peintre en Gironde depuis plus de 10 ans, Malek intervient lui-même sur chaque chantier. Du premier devis peinture à Bordeaux à la dernière couche, vous échangez directement avec lui.
-          </p>
-          <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 28 }}>
-            Aucune sous-traitance. Aucune surprise. Une seule exigence : que vous soyez fier du résultat.
-          </p>
-          <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} bg={C.terra}>Demander un devis →</Btn>
-        </FadeIn>
-      </div>
-    </section>
+        </div>
+      </section>
 
-    {/* ── SERVICES APERÇU ── */}
-    <section style={{ padding: "100px 24px", background: C.warmWhite }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <FadeIn><div style={{ textAlign: "center", marginBottom: 56 }}>
-          <span style={{ fontSize: 12, color: C.sand, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Ce que fait Malek</span>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: 700, color: C.dark, marginTop: 12 }}>Peinture intérieure, extérieure et <span style={{ color: C.terra, fontStyle: "italic" }}>remise en état</span></h2>
-        </div></FadeIn>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 24 }}>
-          {[
-            { icon: <Ico.Home s={28}/>, title: "Peinture intérieure", desc: "Murs, plafonds, boiseries. Malek assure la peinture intérieure à Bordeaux et dans toute la Gironde, de la préparation aux finitions." },
-            { icon: <Ico.Sun s={28}/>, title: "Peinture extérieure", desc: "Ravalement de façade à Bordeaux et en Aquitaine. Volets, sous-faces, traitement anti-humidité. Devis sur site gratuit." },
-            { icon: <Ico.Building s={28}/>, title: "Chantiers pro", desc: "Bureaux, commerces, copropriétés en Gironde. Intervention planifiée selon vos contraintes, délais tenus." },
-            { icon: <Ico.Brush s={28}/>, title: "Remise en état", desc: "Après sinistre ou départ locataire. Malek intervient rapidement pour une remise en état soignée." },
-          ].map((s,i) => (
-            <FadeIn key={i} delay={i*0.1}>
-              <div style={{ background: C.white, borderRadius: 20, padding: "32px 24px", boxShadow: "0 2px 16px rgba(0,0,0,0.04)", textAlign: "center", height: "100%" }}>
-                <div style={{ width: 60, height: 60, borderRadius: "50%", background: `${C.terra}12`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", color: C.terra }}>{s.icon}</div>
-                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, fontWeight: 600, color: C.dark, marginBottom: 10 }}>{s.title}</h3>
-                <p style={{ fontSize: 14, color: C.darkSoft, lineHeight: 1.6 }}>{s.desc}</p>
+      {/* ── À PROPOS ── */}
+      <section className="sec-p-sm" style={{ padding: "80px 24px 120px", background: C.surface }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 56, alignItems: "center" }}>
+          <FadeIn style={{ flex: "1 1 420px" }}>
+            <div style={{ borderRadius: 12, overflow: "hidden", position: "relative" }}>
+              <img
+                src={IMG.chantier}
+                alt="Malek, artisan peintre, sur un chantier en Gironde"
+                loading="lazy"
+                width={800}
+                height={460}
+                className="about-img"
+                style={{ width: "100%", height: 460, objectFit: "cover", display: "block" }}
+              />
+              <div style={{
+                position: "absolute", bottom: 18, left: 18,
+                background: `${C.bg}E8`, backdropFilter: "blur(10px)",
+                borderRadius: 10, padding: "11px 16px", border: `1px solid ${C.subtle}`,
+              }}>
+                <div style={{ fontSize: 10, color: C.ochre, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5 }}>Artisan assuré</div>
+                <div style={{ fontSize: 13, color: C.cream, marginTop: 2 }}>Gironde · 10 ans d'expérience</div>
               </div>
-            </FadeIn>
-          ))}
-        </div>
-        <FadeIn delay={0.3}><div style={{ textAlign: "center", marginTop: 40 }}>
-          <Btn onClick={() => { setPage("services"); window.scrollTo({ top: 0 }); }} bg={C.sage}>Voir toutes nos prestations →</Btn>
-        </div></FadeIn>
-      </div>
-    </section>
-
-    {/* ── VALEURS ── */}
-    <section style={{ padding: "100px 24px", background: C.cream }}>
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        <FadeIn><div style={{ textAlign: "center", marginBottom: 56 }}>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: 700, color: C.dark }}>Ce que vous pouvez <span style={{ color: C.terra, fontStyle: "italic" }}>exiger de nous</span></h2>
-        </div></FadeIn>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 24 }}>
-          {valeurs.map((v,i) => (
-            <FadeIn key={i} delay={i*0.1}><div style={{ textAlign: "center", padding: "32px 20px" }}>
-              <div style={{ width: 60, height: 60, borderRadius: "50%", background: `${C.sage}10`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", color: C.sage }}>{v.icon}</div>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, fontWeight: 600, color: C.dark, marginBottom: 8 }}>{v.title}</h3>
-              <p style={{ fontSize: 14, color: C.darkSoft, lineHeight: 1.6 }}>{v.desc}</p>
-            </div></FadeIn>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* ── GALERIE PHOTOS ── */}
-    <section style={{ padding: "0 24px 100px" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 }}>
-        {[IMG.interieur, IMG.exterieur, IMG.pro].map((src,i) => (
-          <FadeIn key={i} delay={i*0.1}>
-            <div style={{ borderRadius: 20, overflow: "hidden" }}>
-              <img src={src} alt="Chantier Ocré" style={{ width: "100%", height: 260, objectFit: "cover", display: "block" }}/>
             </div>
           </FadeIn>
-        ))}
-      </div>
-    </section>
 
-    {/* ── CTA FINAL ── */}
-    <section style={{ padding: "80px 24px", background: C.sage, textAlign: "center" }}>
-      <FadeIn>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,40px)", fontWeight: 700, color: C.white, marginBottom: 16 }}>Votre chantier mérite un <span style={{ color: C.terra, fontStyle: "italic" }}>artisan peintre sérieux</span></h2>
-        <p style={{ fontSize: 16, color: C.sand, marginBottom: 36, maxWidth: 480, margin: "0 auto 36px" }}>Devis peinture à Bordeaux gratuit — réponse sous 48h — toute l'Aquitaine.</p>
-        <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
-          <Btn href={PHONE} bg={C.terra} style={{ fontSize: 16, padding: "16px 36px" }}><Ico.Phone s={18}/> Appeler Malek</Btn>
-          <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} bg="transparent" border={`2px solid rgba(255,255,255,0.4)`} style={{ fontSize: 16, padding: "14px 36px" }}>Envoyer une demande →</Btn>
+          <FadeIn delay={0.2} style={{ flex: "1 1 340px" }}>
+            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(34px, 5vw, 58px)", fontWeight: 900, color: C.cream, lineHeight: 1.0, marginBottom: 24, letterSpacing: "-0.02em" }}>
+              C'est lui qui{" "}
+              <span style={{ color: C.ochre }}>tient le pinceau.</span>
+            </h2>
+            <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.8, marginBottom: 16 }}>
+              Depuis plus de 10 ans en Gironde, Malek fait le travail lui-même. Toujours lui, sur chaque chantier, du premier jour au dernier.
+            </p>
+            <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.8, marginBottom: 32 }}>
+              Vous le rencontrez pour le devis : c'est lui que vous retrouvez sur le chantier. Vous savez à qui vous parlez. Et lui sait ce qu'il a promis.
+            </p>
+            <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="primary" loc="about">
+              Demander mon devis →
+            </Btn>
+          </FadeIn>
         </div>
-      </FadeIn>
-    </section>
-  </div>);
+      </section>
+
+      {/* ── GALERIE ── */}
+      <section>
+        <div className="gallery-grid">
+          {[
+            [IMG.interieur, "Chantier peinture intérieure"],
+            [IMG.exterieur, "Chantier peinture extérieure"],
+            [IMG.detail,    "Finition peinture Malek"],
+          ].map(([src, alt], i) => (
+            <div key={i} style={{ overflow: "hidden", height: 280 }}>
+              <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                width={800}
+                height={280}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }}
+                onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+                onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── SERVICES (aperçu) ── */}
+      <section className="sec-p" style={{ padding: "120px 24px 100px", background: C.bg }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <FadeIn>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20, marginBottom: 56 }}>
+              <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 900, color: C.cream, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+                Ce que Malek{" "}
+                <span style={{ color: C.ochre }}>fait bien.</span>
+              </h2>
+              <Btn onClick={() => { setPage("services"); window.scrollTo({ top: 0 }); }} variant="secondary">
+                Toutes les prestations →
+              </Btn>
+            </div>
+          </FadeIn>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 2, background: C.subtle }}>
+            {[
+              { icon: <Ico.Home s={22}/>,     title: "Peinture intérieure",    desc: "Murs, plafonds, boiseries. Préparation des supports, enduit si besoin, finition propre." },
+              { icon: <Ico.Sun s={22}/>,      title: "Peinture extérieure",    desc: "Façade, volets, sous-faces. Traitement adapté à chaque support. Nettoyage haute pression inclus." },
+              { icon: <Ico.Building s={22}/>, title: "Chantiers pro",          desc: "Bureaux, commerces, copropriétés. Intervention planifiée selon vos contraintes. Délais tenus." },
+              { icon: <Ico.Brush s={22}/>,    title: "Remise en état",         desc: "Dégât des eaux, départ locataire, après travaux. Intervention rapide, résultat soigné." },
+            ].map((s, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <div style={{
+                  background: i === 0 ? C.surface : C.bg,
+                  padding: "40px 32px",
+                  height: "100%",
+                  position: "relative",
+                  overflow: "hidden",
+                }}>
+                  <span style={{
+                    position: "absolute",
+                    bottom: -10,
+                    right: 18,
+                    fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif",
+                    fontSize: 96,
+                    fontWeight: 900,
+                    color: C.ochre,
+                    opacity: 0.05,
+                    lineHeight: 1,
+                    letterSpacing: "-0.04em",
+                    userSelect: "none",
+                    pointerEvents: "none",
+                  }}>{i + 1}</span>
+                  <div style={{ color: C.ochre, marginBottom: 16, position: "relative" }}>{s.icon}</div>
+                  <h3 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(20px, 2vw, 24px)", fontWeight: 900, color: C.cream, marginBottom: 10, letterSpacing: "-0.015em", position: "relative" }}>
+                    {s.title}
+                  </h3>
+                  <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.7, position: "relative" }}>
+                    {s.desc}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── VALEURS ── */}
+      <section className="sec-p-sm" style={{ padding: "80px 24px 100px", background: C.surface }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <FadeIn>
+            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(30px, 4.5vw, 50px)", fontWeight: 900, color: C.cream, marginBottom: 64, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+              Ce que vous êtes en droit{" "}
+              <span style={{ color: C.ochre }}>d'exiger.</span>
+            </h2>
+          </FadeIn>
+          <div className="valeurs-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(380px, 100%), 1fr))", gap: "48px 56px" }}>
+            {valeurs.map((v, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+                  <div style={{ color: C.ochre, flexShrink: 0, marginTop: 6 }}>
+                    {v.icon}
+                  </div>
+                  <div>
+                    <h3 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(21px, 2vw, 24px)", fontWeight: 900, color: C.cream, marginBottom: 8, letterSpacing: "-0.015em" }}>{v.title}</h3>
+                    <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{v.desc}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA FINAL ── */}
+      <section className="sec-p" style={{ padding: "100px 24px", background: C.ochre }}>
+        <FadeIn>
+          <div style={{ maxWidth: 620, margin: "0 auto", textAlign: "center" }}>
+            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(36px, 5.5vw, 64px)", fontWeight: 900, color: C.white, marginBottom: 20, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+              Votre chantier mérite un artisan sérieux.
+            </h2>
+            <p style={{ fontSize: 16, fontWeight: 500, color: C.white, marginBottom: 40 }}>
+              Devis gratuit sur place · Réponse sous 48h · Toute l'Aquitaine
+            </p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+              <Btn href={PHONE} variant="light" style={{ fontSize: 15, padding: "14px 28px" }} loc="cta_final">
+                <Ico.Phone s={16}/> Appeler Malek
+              </Btn>
+              <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px", boxShadow: "0 2px 16px rgba(0,0,0,0.2)" }} loc="cta_final">
+                <Ico.WhatsApp s={16}/> WhatsApp
+              </Btn>
+              <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} style={{ background: "rgba(255,255,255,0.12)", color: C.white, border: "1.5px solid rgba(255,255,255,0.35)", fontSize: 15, padding: "12px 28px", borderRadius: 10, minHeight: 44, cursor: "pointer", fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600 }} loc="cta_final">
+                Envoyer ma demande →
+              </Btn>
+            </div>
+          </div>
+        </FadeIn>
+      </section>
+    </div>
+  );
 }
 
 // ══════════ PAGE SERVICES ══════════
 function PageServices({ setPage }) {
   const services = [
     {
-      icon: <Ico.Home s={32}/>,
+      icon: <Ico.Home s={26}/>,
       title: "Peinture intérieure",
       subtitle: "Particuliers & copropriétés",
       img: IMG.detail,
       items: ["Murs et plafonds toutes surfaces","Boiseries, plinthes, huisseries","Enduits décoratifs et effets matière","Mise en peinture complète après rénovation","Rafraîchissement locatif entre deux locataires"],
-      desc: "Murs, plafonds, boiseries, enduits décoratifs — Malek assure la peinture intérieure à Bordeaux et dans toute la Gironde. Préparation des surfaces, protections et finitions soignées incluses.",
+      desc: "Murs, plafonds, boiseries, enduits décoratifs. Malek prépare les surfaces, protège vos affaires et finit proprement. Du premier enduit à la dernière couche.",
     },
     {
-      icon: <Ico.Sun s={32}/>,
+      icon: <Ico.Sun s={26}/>,
       title: "Peinture extérieure",
       subtitle: "Façades & ravalement",
       img: IMG.exterieur,
       items: ["Ravalement de façade complet","Peinture de volets et fenêtres","Sous-faces, avant-toits, appuis de fenêtre","Traitement anti-humidité et préparation","Nettoyage haute pression inclus"],
-      desc: "Peintre en bâtiment en Gironde, Malek réalise le ravalement de façade et la peinture extérieure à Bordeaux. Chaque support est traité avec le matériau adapté : crépi, bois, béton, aluminium.",
+      desc: "Façade, volets, sous-faces. Traitement adapté à chaque support : crépi, bois, béton, aluminium. Nettoyage haute pression inclus avant de commencer.",
     },
     {
-      icon: <Ico.Building s={32}/>,
+      icon: <Ico.Building s={26}/>,
       title: "Chantiers professionnels",
       subtitle: "Entreprises & commerces",
       img: IMG.pro,
       items: ["Bureaux et open spaces","Commerces, restaurants, boutiques","Halls et parties communes de copropriété","Entrepôts et locaux industriels","Intervention hors horaires si besoin"],
-      desc: "Artisan peintre en Gironde, Malek intervient pour les professionnels : bureaux, commerces, copropriétés. Délais respectés, travail en plusieurs phases si besoin.",
+      desc: "Bureaux, commerces, copropriétés. Malek planifie l'intervention autour de vos contraintes. Les délais sont tenus.",
     },
     {
-      icon: <Ico.Brush s={32}/>,
+      icon: <Ico.Brush s={26}/>,
       title: "Remise en état",
       subtitle: "Rapide et soigné",
       img: IMG.renovation,
-      items: ["Remise en état après sinistre (dégât des eaux, incendie)","Sortie de locataire : état des lieux impeccable","Après travaux : raccords et finitions","Retouches ponctuelles","Intervention sous 72h si urgence"],
-      desc: "Dégât des eaux, sortie de locataire, fin de chantier — Malek remet votre bien en état rapidement. Résultat propre, prêt à être habité ou mis en location.",
+      items: ["Remise en état après sinistre","Sortie de locataire : état des lieux impeccable","Après travaux : raccords et finitions","Retouches ponctuelles","Intervention sous 72h si urgence"],
+      desc: "Dégât des eaux, départ locataire, fin de chantier. Malek intervient vite et repart quand le bien est prêt à être habité ou mis en location.",
     },
   ];
 
-  return (<div style={{ paddingTop: 72 }}>
-    {/* HERO SERVICES */}
-    <section style={{ background: C.sage, padding: "80px 24px 64px", textAlign: "center" }}>
-      <FadeIn>
-        <span style={{ fontSize: 12, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Peinture intérieure & extérieure</span>
-        <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(30px,5vw,48px)", fontWeight: 700, color: C.white, marginTop: 12, marginBottom: 16 }}>Peintre en bâtiment <span style={{ color: C.terra, fontStyle: "italic" }}>en Aquitaine</span></h1>
-        <p style={{ fontSize: 16, color: C.sand, maxWidth: 500, margin: "0 auto" }}>Particuliers, professionnels, copropriétés — Malek intervient pour tous types de chantiers en Gironde et dans toute l'Aquitaine.</p>
-      </FadeIn>
-    </section>
+  return (
+    <div style={{ paddingTop: 68, background: C.bg }}>
+      <section className="sec-p-sm" style={{ background: C.surface, padding: "80px 24px 64px", textAlign: "center", borderBottom: `1px solid ${C.subtle}` }}>
+        <FadeIn>
+          <h1 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(40px, 6vw, 72px)", fontWeight: 900, color: C.cream, marginBottom: 14, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+            Ce que Malek fait.{" "}
+            <span style={{ color: C.ochre }}>Et comment.</span>
+          </h1>
+          <p style={{ fontSize: 16, color: C.muted, maxWidth: 500, margin: "0 auto 28px" }}>
+            Particuliers, professionnels, copropriétés : Malek intervient en Gironde et dans toute l'Aquitaine.
+          </p>
+          <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+            <Btn href={PHONE} variant="primary" style={{ fontSize: 14 }} loc="services_header"><Ico.Phone s={15}/> Appeler Malek</Btn>
+            <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 14 }} loc="services_header"><Ico.WhatsApp s={15}/> WhatsApp</Btn>
+          </div>
+        </FadeIn>
+      </section>
 
-    {/* LISTE SERVICES */}
-    <section style={{ padding: "80px 24px" }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 80 }}>
-        {services.map((s,i) => (
-          <FadeIn key={i}>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 48, alignItems: "center", flexDirection: i%2===0 ? "row" : "row-reverse" }}>
-              <div style={{ flex: "1 1 400px", borderRadius: 20, overflow: "hidden" }}>
-                <img src={s.img} alt={s.title} style={{ width: "100%", height: 320, objectFit: "cover", display: "block" }}/>
-              </div>
-              <div style={{ flex: "1 1 340px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                  <div style={{ width: 54, height: 54, borderRadius: 14, background: `${C.terra}12`, display: "flex", alignItems: "center", justifyContent: "center", color: C.terra }}>{s.icon}</div>
-                  <div>
-                    <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, fontWeight: 700, color: C.dark }}>{s.title}</div>
-                    <div style={{ fontSize: 12, color: C.terra, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginTop: 2 }}>{s.subtitle}</div>
+      <section className="sec-p-sm" style={{ padding: "80px 24px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 80 }}>
+          {services.map((s, i) => (
+            <FadeIn key={i}>
+              <div className="service-row" style={{ display: "flex", flexWrap: "wrap", gap: 48, alignItems: "center", flexDirection: i % 2 === 0 ? "row" : "row-reverse" }}>
+                <div style={{ flex: "1 1 400px", borderRadius: 12, overflow: "hidden" }}>
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    width={800}
+                    height={320}
+                    style={{ width: "100%", height: 320, objectFit: "cover", display: "block" }}
+                  />
+                </div>
+                <div style={{ flex: "1 1 320px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                    <div style={{ width: 48, height: 48, borderRadius: 12, background: `${C.ochre}18`, display: "flex", alignItems: "center", justifyContent: "center", color: C.ochre, flexShrink: 0 }}>
+                      {s.icon}
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 21, fontWeight: 700, color: C.cream }}>{s.title}</div>
+                      <div style={{ fontSize: 11, color: C.ochre, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2, marginTop: 2 }}>{s.subtitle}</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.75, marginBottom: 20 }}>{s.desc}</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {s.items.map((t, j) => (
+                      <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                        <div style={{ flexShrink: 0, marginTop: 1 }}><Ico.Check s={16}/></div>
+                        <span style={{ fontSize: 15, color: C.cream }}>{t}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <p style={{ fontSize: 15, color: C.darkSoft, lineHeight: 1.7, marginBottom: 20 }}>{s.desc}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {s.items.map((t,j) => (
-                    <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}><Ico.Check/><span style={{ fontSize: 14, color: C.dark }}>{t}</span></div>
-                  ))}
-                </div>
               </div>
-            </div>
-          </FadeIn>
-        ))}
-      </div>
-    </section>
-
-    {/* CTA */}
-    <section style={{ padding: "80px 24px", background: C.cream, textAlign: "center" }}>
-      <FadeIn>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: C.dark, marginBottom: 12 }}>Besoin d'un devis peinture à Bordeaux ?</h2>
-        <p style={{ fontSize: 16, color: C.darkSoft, marginBottom: 32 }}>Devis gratuit — réponse sous 48h — sans engagement</p>
-        <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
-          <Btn href={PHONE} bg={C.terra} style={{ fontSize: 16, padding: "16px 36px" }}><Ico.Phone s={18}/> Appeler Malek</Btn>
-          <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} bg={C.sage} style={{ fontSize: 16, padding: "16px 36px" }}><Ico.Mail s={18}/> Demande par formulaire</Btn>
+            </FadeIn>
+          ))}
         </div>
-      </FadeIn>
-    </section>
-  </div>);
+      </section>
+
+      <section className="sec-p-sm" style={{ padding: "80px 24px", background: C.surface, textAlign: "center", borderTop: `1px solid ${C.subtle}` }}>
+        <FadeIn>
+          <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 900, color: C.cream, marginBottom: 12, letterSpacing: "-0.02em", lineHeight: 1.0 }}>
+            Besoin d'un devis ?
+          </h2>
+          <p style={{ fontSize: 16, color: C.muted, marginBottom: 32 }}>Gratuit · Réponse sous 48h · Sans engagement</p>
+          <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+            <Btn href={PHONE} variant="primary" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta"><Ico.Phone s={16}/> Appeler Malek</Btn>
+            <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta"><Ico.WhatsApp s={16}/> WhatsApp</Btn>
+            <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta">
+              <Ico.Mail s={16}/> Formulaire de devis
+            </Btn>
+          </div>
+        </FadeIn>
+      </section>
+    </div>
+  );
 }
 
 // ══════════ PAGE CONTACT ══════════
 function PageContact() {
   const [state, handleSubmit] = useForm("xjgjqdza");
+  useEffect(() => {
+    if (state.succeeded) trackLead("form", "contact");
+  }, [state.succeeded]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const inp = { width: "100%", padding: "14px 16px", borderRadius: 10, background: C.warmWhite, border: `1px solid ${C.beige}`, fontSize: 15, color: C.dark, outline: "none" };
-  const lab = { display: "block", fontSize: 12, fontWeight: 600, color: C.darkSoft, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.8 };
+  const inp = {
+    width: "100%", padding: "13px 16px", borderRadius: 10,
+    background: C.surface, border: `1px solid ${C.subtle}`,
+    fontSize: 15, color: C.cream, outline: "none",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
+    boxSizing: "border-box",
+  };
+  const lab = {
+    display: "block", fontSize: 11, fontWeight: 600,
+    color: C.muted, marginBottom: 6,
+    textTransform: "uppercase", letterSpacing: 0.8,
+  };
 
-  return (<div style={{ paddingTop: 72, background: C.cream, minHeight: "100vh" }}>
-    <section style={{ padding: "64px 24px" }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 56, alignItems: "flex-start" }}>
+  return (
+    <div style={{ paddingTop: 68, background: C.bg, minHeight: "100vh" }}>
+      <section style={{ padding: "64px 24px 100px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 56, alignItems: "flex-start" }}>
 
-        {/* FORMULAIRE */}
-        <FadeIn style={{ flex: "1 1 460px" }}>
-          <span style={{ fontSize: 12, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Devis gratuit</span>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(26px,4vw,36px)", fontWeight: 700, color: C.dark, marginTop: 10, marginBottom: 8 }}>Décrivez-nous votre <span style={{ color: C.terra, fontStyle: "italic" }}>chantier</span></h2>
-          <p style={{ fontSize: 14, color: C.sand, marginBottom: 32 }}>Artisan peintre en Gironde — Malek vous répond sous 48h. Sans engagement.</p>
+          {/* Formulaire */}
+          <FadeIn style={{ flex: "1 1 440px" }}>
+            <h1 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(32px, 4.5vw, 52px)", fontWeight: 900, color: C.cream, marginTop: 0, marginBottom: 8, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+              Décrivez votre{" "}
+              <span style={{ color: C.ochre }}>chantier.</span>
+            </h1>
+            <p style={{ fontSize: 16, color: C.muted, marginBottom: 32 }}>
+              Malek vous rappelle sous 48h. Si c'est urgent, appelez directement au{" "}
+              <a href={PHONE} style={{ color: C.cream, textDecoration: "none", fontWeight: 600 }}>{PHONE_DISPLAY}</a>.
+            </p>
 
-          {state.succeeded ? (
-            <div style={{ background: C.sage, borderRadius: 20, padding: "48px 32px", textAlign: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 16 }}>✓</div>
-              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, color: C.white, marginBottom: 12 }}>Demande envoyée !</h3>
-              <p style={{ fontSize: 15, color: C.sand, lineHeight: 1.7 }}>Malek vous répond dans les 48h. Si c'est urgent, appelez directement.</p>
-              <Btn href={PHONE} bg={C.terra} style={{ marginTop: 24 }}><Ico.Phone s={15}/> {PHONE_DISPLAY}</Btn>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <div><label style={lab}>Prénom</label><input name="prenom" placeholder="Votre prénom" style={inp} required/></div>
-                <div><label style={lab}>Nom</label><input name="nom" placeholder="Votre nom" style={inp}/></div>
+            {state.succeeded ? (
+              <div style={{ background: C.surface, borderRadius: 12, padding: "48px 32px", textAlign: "center", border: `1px solid ${C.subtle}` }}>
+                <div style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 56, color: C.ochre, marginBottom: 16, lineHeight: 1 }}>✓</div>
+                <h3 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 26, color: C.cream, marginBottom: 12 }}>Reçu.</h3>
+                <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.7 }}>
+                  Malek vous rappelle dans les 48h.<br/>Besoin d'une réponse plus rapide ?
+                </p>
+                <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 24, flexWrap: "wrap" }}>
+                  <Btn href={PHONE} variant="primary" loc="success_card"><Ico.Phone s={15}/> {PHONE_DISPLAY}</Btn>
+                  <Btn href={WHATSAPP} variant="whatsapp" loc="success_card"><Ico.WhatsApp s={15}/> WhatsApp</Btn>
+                </div>
               </div>
-              <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <div><label style={lab}>Téléphone</label><input name="telephone" placeholder="06 xx xx xx xx" style={inp} required/></div>
-                <div><label style={lab}>Email</label><input name="email" placeholder="votre@email.fr" style={inp}/></div>
-              </div>
-              <div style={{ marginTop: 16 }}>
-                <label style={lab}>Ville</label>
-                <input name="ville" placeholder="Ex : Bordeaux, Bayonne, Pau..." style={inp}/>
-              </div>
-              <div style={{ marginTop: 16 }}>
-                <label style={lab}>Type de chantier</label>
-                <select name="typeChantier" style={inp}>
-                  <option value="">Sélectionnez</option>
-                  <option>Peinture intérieure — particulier</option>
-                  <option>Peinture extérieure / façade</option>
-                  <option>Chantier professionnel</option>
-                  <option>Remise en état locatif</option>
-                  <option>Après sinistre</option>
-                  <option>Autre</option>
-                </select>
-              </div>
-              <div style={{ marginTop: 16 }}>
-                <label style={lab}>Surface approximative</label>
-                <select name="surface" style={inp}>
-                  <option value="">Sélectionnez</option>
-                  <option>Moins de 30 m²</option>
-                  <option>30 à 60 m²</option>
-                  <option>60 à 100 m²</option>
-                  <option>100 à 200 m²</option>
-                  <option>Plus de 200 m²</option>
-                  <option>Je ne sais pas</option>
-                </select>
-              </div>
-              <div style={{ marginTop: 16 }}>
-                <label style={lab}>Description / précisions</label>
-                <textarea name="message" placeholder="Décrivez votre projet : état des murs, couleurs souhaitées, contraintes, délais..." rows={4} style={{ ...inp, resize: "vertical" }}/>
-              </div>
-              <div style={{ marginTop: 28 }}>
-                <button type="submit" disabled={state.submitting} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "16px", borderRadius: 12, background: C.terra, color: C.white, fontSize: 16, fontWeight: 700, cursor: state.submitting ? "not-allowed" : "pointer", opacity: state.submitting ? 0.7 : 1, border: "none", boxShadow: `0 4px 20px ${C.terra}40` }}>
-                  <Ico.Mail s={18}/> {state.submitting ? "Envoi en cours…" : "Envoyer ma demande"}
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div className="contact-form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                  <div>
+                    <label htmlFor="prenom" style={lab}>Prénom *</label>
+                    <input id="prenom" name="prenom" type="text" placeholder="Votre prénom" className="form-input" style={inp} required aria-required="true"/>
+                  </div>
+                  <div>
+                    <label htmlFor="telephone" style={lab}>Téléphone *</label>
+                    <input id="telephone" name="telephone" type="tel" placeholder="06 xx xx xx xx" className="form-input" style={inp} required aria-required="true"/>
+                  </div>
+                </div>
+                <div style={{ marginBottom: 14 }}>
+                  <label htmlFor="typeChantier" style={lab}>Type de chantier</label>
+                  <select id="typeChantier" name="typeChantier" className="form-input" style={{ ...inp, cursor: "pointer" }}>
+                    <option value="">Sélectionnez</option>
+                    <option>Peinture intérieure / particulier</option>
+                    <option>Peinture extérieure / façade</option>
+                    <option>Chantier professionnel</option>
+                    <option>Remise en état locatif</option>
+                    <option>Après sinistre</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <div style={{ marginBottom: 24 }}>
+                  <label htmlFor="message" style={lab}>Décrivez votre projet</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    placeholder="État des murs, surface approximative, contraintes, délais souhaités..."
+                    rows={4}
+                    className="form-input"
+                    style={{ ...inp, resize: "vertical" }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={state.submitting}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    width: "100%", padding: "15px",
+                    borderRadius: 10,
+                    background: state.submitting ? C.ochreDim : C.ochre,
+                    color: C.white, fontSize: 16, fontWeight: 700,
+                    cursor: state.submitting ? "not-allowed" : "pointer",
+                    border: "none",
+                    fontFamily: "'Bricolage Grotesque', sans-serif",
+                    minHeight: 52,
+                    boxShadow: `0 4px 20px ${C.ochre}38`,
+                    transition: "background 0.2s",
+                  }}
+                >
+                  <Ico.Mail s={18}/>
+                  {state.submitting ? "Envoi…" : "Envoyer ma demande"}
                 </button>
+                <p style={{ fontSize: 12, color: C.muted, textAlign: "center", marginTop: 10 }}>
+                  Sans engagement · Réponse sous 48h
+                </p>
+              </form>
+            )}
+          </FadeIn>
+
+          {/* Coordonnées */}
+          <FadeIn delay={0.2} style={{ flex: "1 1 280px" }}>
+            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 22, fontWeight: 700, color: C.cream, marginBottom: 24 }}>
+              Contacter Malek
+            </h2>
+
+            <a href={PHONE} onClick={() => trackLead("phone", "contact")} style={{ display: "flex", alignItems: "center", gap: 14, padding: "17px", background: C.ochre, borderRadius: 12, marginBottom: 10, textDecoration: "none", boxShadow: `0 4px 16px ${C.ochre}28` }}>
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: C.white, flexShrink: 0 }}>
+                <Ico.Phone s={20}/>
               </div>
-            </form>
-          )}
-        </FadeIn>
+              <div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2 }}>Appeler maintenant</div>
+                <div style={{ fontSize: 17, fontWeight: 700, color: C.white, marginTop: 2 }}>{PHONE_DISPLAY}</div>
+              </div>
+            </a>
 
-        {/* COORDONNÉES */}
-        <FadeIn delay={0.2} style={{ flex: "1 1 300px" }}>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, fontWeight: 700, color: C.dark, marginBottom: 24 }}>Contacter Malek directement</h3>
+            <a href={WHATSAPP} onClick={() => trackLead("whatsapp", "contact")} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 14, padding: "15px 17px", background: "#25D366", borderRadius: 12, marginBottom: 10, textDecoration: "none", boxShadow: "0 2px 12px rgba(37,211,102,0.22)" }}>
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: C.white, flexShrink: 0 }}>
+                <Ico.WhatsApp s={20}/>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2 }}>WhatsApp</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: C.white }}>Envoyer un message</div>
+              </div>
+            </a>
 
-          <a href={PHONE} style={{ display: "flex", alignItems: "center", gap: 14, padding: "20px", background: C.terra, borderRadius: 16, marginBottom: 16, textDecoration: "none", boxShadow: `0 4px 16px ${C.terra}30` }}>
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: C.white }}><Ico.Phone s={22}/></div>
-            <div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Appeler maintenant</div>
-              <div style={{ fontSize: 17, fontWeight: 700, color: C.white, marginTop: 2 }}>{PHONE_DISPLAY}</div>
+            <a href={"mailto:"+EMAIL} style={{ display: "flex", alignItems: "center", gap: 14, padding: "15px 17px", background: C.surface, borderRadius: 12, marginBottom: 10, textDecoration: "none", border: `1px solid ${C.subtle}` }}>
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: `${C.ochre}18`, display: "flex", alignItems: "center", justifyContent: "center", color: C.ochre, flexShrink: 0 }}>
+                <Ico.Mail s={20}/>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: C.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2 }}>Email</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: C.cream }}>{EMAIL}</div>
+              </div>
+            </a>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 20 }}>
+              {[
+                [<Ico.Pin s={17}/>, "Zone", "Toute l'Aquitaine"],
+                [<Ico.Clock s={17}/>, "Horaires", "Lun–Sam · 8h–19h"],
+              ].map(([icon, label, val], i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px", background: C.surface, borderRadius: 12, border: `1px solid ${C.subtle}` }}>
+                  <div style={{ color: C.ochre, flexShrink: 0 }}>{icon}</div>
+                  <div>
+                    <div style={{ fontSize: 10, color: C.muted, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 600 }}>{label}</div>
+                    <div style={{ fontSize: 13, color: C.cream, fontWeight: 600, marginTop: 1 }}>{val}</div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </a>
 
-          <a href={"mailto:"+EMAIL} style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 20px", background: C.white, borderRadius: 16, marginBottom: 16, boxShadow: "0 2px 12px rgba(0,0,0,0.04)", textDecoration: "none" }}>
-            <div style={{ width: 44, height: 44, borderRadius: 12, background: `${C.terra}10`, display: "flex", alignItems: "center", justifyContent: "center", color: C.terra }}><Ico.Mail s={20}/></div>
-            <div>
-              <div style={{ fontSize: 12, color: C.sand, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Email</div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.dark }}>{EMAIL}</div>
+            <div style={{ borderRadius: 12, overflow: "hidden" }}>
+              <img
+                src={IMG.aquitaine}
+                alt="Chantier peinture Aquitaine"
+                loading="lazy"
+                width={800}
+                height={240}
+                style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }}
+              />
             </div>
-          </a>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 20px", background: C.white, borderRadius: 16, marginBottom: 16, boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
-            <div style={{ width: 44, height: 44, borderRadius: 12, background: `${C.sage}10`, display: "flex", alignItems: "center", justifyContent: "center", color: C.sage }}><Ico.Pin s={20}/></div>
-            <div>
-              <div style={{ fontSize: 12, color: C.sand, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Zone d'intervention</div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.dark }}>Toute l'Aquitaine</div>
-            </div>
-          </div>
-
-          <div style={{ padding: "18px 20px", background: C.white, borderRadius: 16, marginBottom: 28, boxShadow: "0 2px 12px rgba(0,0,0,0.04)", display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 44, height: 44, borderRadius: 12, background: `${C.terra}10`, display: "flex", alignItems: "center", justifyContent: "center", color: C.terra }}><Ico.Clock s={20}/></div>
-            <div>
-              <div style={{ fontSize: 12, color: C.sand, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Disponibilité</div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.dark }}>Lun – Sam · 8h à 19h</div>
-            </div>
-          </div>
-
-          <div style={{ borderRadius: 16, overflow: "hidden" }}>
-            <img src={IMG.aquitaine} alt="Aquitaine" style={{ width: "100%", height: 320, objectFit: "cover", display: "block" }}/>
-          </div>
-        </FadeIn>
-      </div>
-    </section>
-  </div>);
+          </FadeIn>
+        </div>
+      </section>
+    </div>
+  );
 }
 
-// ══════════ APP PRINCIPAL ══════════
+// ══════════ APP ══════════
 function App() {
   const [page, setPage] = useState("accueil");
 
+  useEffect(() => {
+    const names = { accueil: "Accueil", services: "Services", contact: "Devis" };
+    trackPageView(names[page] || page);
+  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <div style={{ paddingBottom: 70 }}>
+    <div className="app-root" style={{ background: C.bg, minHeight: "100vh", paddingBottom: 70 }}>
       <Header page={page} setPage={setPage}/>
-      {page === "accueil"  && <PageAccueil setPage={setPage}/>}
-      {page === "services" && <PageServices setPage={setPage}/>}
-      {page === "contact"  && <PageContact/>}
+      <main>
+        {page === "accueil"  && <PageAccueil  setPage={setPage}/>}
+        {page === "services" && <PageServices setPage={setPage}/>}
+        {page === "contact"  && <PageContact/>}
+      </main>
       <Footer setPage={setPage}/>
       <StickyCTA setPage={setPage}/>
     </div>
