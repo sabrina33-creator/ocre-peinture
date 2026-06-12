@@ -12,20 +12,20 @@ import hero from "./hero.jpg";
 
 /* ═══════════════════════════════════════
    OCRÉ — Peinture Professionnelle · Aquitaine
-   Fonts : Big Shoulders Display (display) + Bricolage Grotesque (body)
+   Fonts : Playfair Display (display) + DM Sans (body)
    ═══════════════════════════════════════ */
 
 const C = {
-  bg:         "#17140F",
-  surface:    "#211E19",
-  surfaceHi:  "#2C2822",
-  ochre:      "#C8783A",
-  ochreDim:   "#A8622E",
-  ochreGlow:  "#E09050",
-  cream:      "#F0EBE0",
-  muted:      "#8D8379",
-  subtle:     "#2E2A24",
-  white:      "#FFFFFF",
+  cream:     "#FAF7F2",
+  warmWhite: "#FFFDF9",
+  beige:     "#EDE5D8",
+  sand:      "#8C8680",
+  terra:     "#C4813A",
+  sage:      "#2B3440",
+  sageDark:  "#1E2630",
+  dark:      "#1A1A1A",
+  darkSoft:  "#4A4A48",
+  white:     "#FFFFFF",
 };
 
 const PHONE         = "tel:+33782674494";
@@ -82,7 +82,7 @@ const Ico = {
     </svg>
   ),
   Check: ({ s = 18 }) => (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={C.ochre} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={C.terra} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polyline points="20 6 9 17 4 12"/>
     </svg>
   ),
@@ -154,8 +154,8 @@ const Ico = {
 function OcreLogo({ size = 36 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <rect width="40" height="40" rx="9" fill={C.ochre}/>
-      <text x="20" y="29" fontFamily="'Big Shoulders Display', Arial, sans-serif" fontSize="26" fontWeight="900" textAnchor="middle" fill={C.white}>O</text>
+      <rect width="40" height="40" rx="9" fill={C.terra}/>
+      <text x="20" y="29" fontFamily="'Playfair Display', Georgia, serif" fontSize="26" fontWeight="700" textAnchor="middle" fill={C.white}>O</text>
     </svg>
   );
 }
@@ -171,7 +171,7 @@ function Btn({ href, onClick, children, variant = "primary", style = {}, loc }) 
     borderRadius: 10,
     fontSize: 14,
     fontWeight: 600,
-    fontFamily: "'Bricolage Grotesque', sans-serif",
+    fontFamily: "'DM Sans', sans-serif",
     cursor: "pointer",
     transition: "opacity 0.15s cubic-bezier(0,0,0.2,1), transform 0.15s cubic-bezier(0,0,0.2,1)",
     textDecoration: "none",
@@ -181,11 +181,11 @@ function Btn({ href, onClick, children, variant = "primary", style = {}, loc }) 
     lineHeight: 1,
   };
   const variants = {
-    primary:   { background: C.ochre,    color: C.white,  boxShadow: `0 2px 14px ${C.ochre}35` },
+    primary:   { background: C.terra,    color: C.white,  boxShadow: `0 2px 14px ${C.terra}35` },
     whatsapp:  { background: "#25D366",  color: C.white,  boxShadow: "0 2px 14px rgba(37,211,102,0.28)" },
-    ghost:     { background: "rgba(255,255,255,0.08)", color: C.cream, border: "1.5px solid rgba(255,255,255,0.18)" },
-    secondary: { background: "transparent", color: C.muted, border: `1.5px solid ${C.subtle}` },
-    light:     { background: C.white,    color: C.ochre },
+    ghost:     { background: "rgba(255,255,255,0.12)", color: C.white, border: "1.5px solid rgba(255,255,255,0.30)" },
+    secondary: { background: "transparent", color: C.sand, border: `1.5px solid ${C.beige}` },
+    light:     { background: C.white,    color: C.terra },
   };
   const finalStyle = { ...base, ...variants[variant], ...style };
 
@@ -241,9 +241,9 @@ function Header({ page, setPage }) {
   return (
     <header style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
-      background: transparent ? "transparent" : `${C.bg}F2`,
+      background: transparent ? "transparent" : `${C.warmWhite}F2`,
       backdropFilter: transparent ? "none" : "blur(18px)",
-      borderBottom: transparent ? "1px solid transparent" : `1px solid ${C.subtle}`,
+      borderBottom: transparent ? "1px solid transparent" : `1px solid ${C.beige}`,
       transition: "all 0.35s",
     }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
@@ -255,8 +255,8 @@ function Header({ page, setPage }) {
         >
           <OcreLogo size={34}/>
           <div>
-            <div style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 21, fontWeight: 700, color: C.cream, lineHeight: 1 }}>Ocré</div>
-            <div style={{ fontSize: 9, color: C.muted, letterSpacing: 2, fontWeight: 500, textTransform: "uppercase", marginTop: 2 }}>Peinture · Aquitaine</div>
+            <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 21, fontWeight: 700, color: transparent ? C.white : C.sage, lineHeight: 1 }}>Ocré</div>
+            <div style={{ fontSize: 9, color: transparent ? "rgba(255,255,255,0.65)" : C.sand, letterSpacing: 2, fontWeight: 500, textTransform: "uppercase", marginTop: 2 }}>Peinture · Aquitaine</div>
           </div>
         </button>
 
@@ -268,9 +268,9 @@ function Header({ page, setPage }) {
               aria-current={page === n.id ? "page" : undefined}
               style={{
                 fontSize: 14, fontWeight: 500, cursor: "pointer", background: "none", border: "none",
-                color: page === n.id ? C.ochre : C.muted,
-                borderBottom: page === n.id ? `1.5px solid ${C.ochre}` : "1.5px solid transparent",
-                padding: "4px 0", fontFamily: "'Bricolage Grotesque', sans-serif",
+                color: page === n.id ? C.terra : (transparent ? "rgba(255,255,255,0.75)" : C.sand),
+                borderBottom: page === n.id ? `1.5px solid ${C.terra}` : "1.5px solid transparent",
+                padding: "4px 0", fontFamily: "'DM Sans', sans-serif",
                 transition: "color 0.2s", minHeight: 44,
               }}
             >
@@ -290,21 +290,21 @@ function Header({ page, setPage }) {
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={menuOpen}
-          style={{ display: "none", background: "none", border: "none", cursor: "pointer", color: C.cream, padding: 4, minHeight: 44, minWidth: 44, alignItems: "center", justifyContent: "center" }}
+          style={{ display: "none", background: "none", border: "none", cursor: "pointer", color: transparent ? C.white : C.sage, padding: 4, minHeight: 44, minWidth: 44, alignItems: "center", justifyContent: "center" }}
         >
           {menuOpen ? <Ico.X/> : <Ico.Menu/>}
         </button>
       </div>
 
       {menuOpen && (
-        <div style={{ position: "fixed", top: 68, left: 0, right: 0, bottom: 0, background: C.bg, padding: "48px 28px", zIndex: 999, display: "flex", flexDirection: "column" }}>
+        <div style={{ position: "fixed", top: 68, left: 0, right: 0, bottom: 0, background: C.warmWhite, padding: "48px 28px", zIndex: 999, display: "flex", flexDirection: "column" }}>
           {links.map(n => (
             <button
               key={n.id}
               onClick={() => goTo(n.id)}
               style={{
-                fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 38, fontWeight: 700,
-                color: page === n.id ? C.ochre : C.cream,
+                fontFamily: "'Playfair Display', Georgia, serif", fontSize: 38, fontWeight: 700,
+                color: page === n.id ? C.terra : C.sage,
                 background: "none", border: "none", cursor: "pointer",
                 padding: "10px 0", textAlign: "left", minHeight: 60,
               }}
@@ -344,8 +344,8 @@ function StickyCTA({ setPage }) {
         className="sticky-cta"
         style={{
           position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 999,
-          background: `${C.bg}F5`, backdropFilter: "blur(16px)",
-          borderTop: `1px solid ${C.subtle}`, padding: "10px 14px",
+          background: `${C.warmWhite}F5`, backdropFilter: "blur(16px)",
+          borderTop: `1px solid ${C.beige}`, padding: "10px 14px",
           paddingBottom: "calc(10px + env(safe-area-inset-bottom))",
           display: "none", gap: 8,
         }}
@@ -356,7 +356,7 @@ function StickyCTA({ setPage }) {
         <Btn href={WHATSAPP} variant="whatsapp" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9 }} loc="sticky">
           <Ico.WhatsApp s={14}/> WhatsApp
         </Btn>
-        <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9, border: `1.5px solid ${C.subtle}` }} loc="sticky">
+        <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9, border: `1.5px solid ${C.beige}` }} loc="sticky">
           <Ico.Mail s={14}/> Devis
         </Btn>
       </div>
@@ -369,41 +369,41 @@ function StickyCTA({ setPage }) {
 function Footer({ setPage }) {
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0 }); };
   return (
-    <footer style={{ background: C.surface, borderTop: `1px solid ${C.subtle}`, padding: "64px 24px 40px" }}>
+    <footer style={{ background: C.warmWhite, borderTop: `1px solid ${C.beige}`, padding: "64px 24px 40px" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div className="footer-cols" style={{ display: "flex", flexWrap: "wrap", gap: 48, marginBottom: 48 }}>
           <div style={{ flex: "1 1 280px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
               <OcreLogo size={30}/>
-              <span style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 20, fontWeight: 700, color: C.cream }}>Ocré</span>
+              <span style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 20, fontWeight: 700, color: C.sage }}>Ocré</span>
             </div>
-            <p style={{ fontSize: 14, lineHeight: 1.7, color: C.muted, maxWidth: 280 }}>
+            <p style={{ fontSize: 14, lineHeight: 1.7, color: C.sand, maxWidth: 280 }}>
               Peintre professionnel en Aquitaine. Malek intervient lui-même, du devis à la finition.
             </p>
           </div>
           <nav aria-label="Navigation secondaire" style={{ flex: "1 1 140px" }}>
-            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.muted, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Navigation</h4>
+            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.sand, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Navigation</h4>
             {[["accueil","Accueil"],["services","Services"],["contact","Devis gratuit"]].map(([p, label]) => (
               <button
                 key={p}
                 onClick={() => goTo(p)}
-                style={{ display: "block", fontSize: 14, color: C.muted, cursor: "pointer", marginBottom: 10, background: "none", border: "none", padding: "4px 0", textAlign: "left", minHeight: 44 }}
+                style={{ display: "block", fontSize: 14, color: C.sand, cursor: "pointer", marginBottom: 10, background: "none", border: "none", padding: "4px 0", textAlign: "left", minHeight: 44 }}
               >
                 {label}
               </button>
             ))}
           </nav>
           <div style={{ flex: "1 1 200px" }}>
-            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.muted, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Contact</h4>
-            <p style={{ fontSize: 14, color: C.muted, lineHeight: 2.2 }}>
+            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.sand, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Contact</h4>
+            <p style={{ fontSize: 14, color: C.sand, lineHeight: 2.2 }}>
               Toute l'Aquitaine<br/>
-              <a href={PHONE} onClick={() => trackLead("phone", "footer")} style={{ color: C.cream, textDecoration: "none" }}>{PHONE_DISPLAY}</a><br/>
-              <a href={"mailto:"+EMAIL} style={{ color: C.muted, textDecoration: "none", fontSize: 12 }}>{EMAIL}</a>
+              <a href={PHONE} onClick={() => trackLead("phone", "footer")} style={{ color: C.dark, textDecoration: "none" }}>{PHONE_DISPLAY}</a><br/>
+              <a href={"mailto:"+EMAIL} style={{ color: C.sand, textDecoration: "none", fontSize: 12 }}>{EMAIL}</a>
             </p>
           </div>
           <div style={{ flex: "1 1 180px" }}>
-            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.muted, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Zones</h4>
-            <p style={{ fontSize: 14, color: C.muted, lineHeight: 2.2 }}>
+            <h4 style={{ fontSize: 11, fontWeight: 600, color: C.sand, letterSpacing: 1.5, marginBottom: 16, textTransform: "uppercase" }}>Zones</h4>
+            <p style={{ fontSize: 14, color: C.sand, lineHeight: 2.2 }}>
               Bordeaux & agglo<br/>
               Bassin d'Arcachon<br/>
               Bayonne · Pau<br/>
@@ -411,7 +411,7 @@ function Footer({ setPage }) {
             </p>
           </div>
         </div>
-        <div style={{ borderTop: `1px solid ${C.subtle}`, paddingTop: 24, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: 12, color: C.muted }}>
+        <div style={{ borderTop: `1px solid ${C.beige}`, paddingTop: 24, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: 12, color: C.sand }}>
           <span>© 2026 Ocré · Peinture Aquitaine</span>
           <span>Artisan assuré · SIRET en cours</span>
         </div>
@@ -459,28 +459,28 @@ function PageAccueil({ setPage }) {
             fetchPriority="high"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(108deg, ${C.bg}EC 0%, ${C.bg}A8 55%, ${C.bg}38 100%)` }}/>
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(108deg, ${C.sageDark}EC 0%, ${C.sageDark}A8 55%, ${C.sageDark}38 100%)` }}/>
         </div>
 
         <div className="hero-content" style={{ maxWidth: 1100, margin: "0 auto", padding: "140px 24px 100px", position: "relative", zIndex: 1, width: "100%" }}>
           <FadeIn>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `${C.ochre}18`, padding: "7px 16px", borderRadius: 50, marginBottom: 32, border: `1px solid ${C.ochre}28` }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `${C.terra}20`, padding: "7px 16px", borderRadius: 50, marginBottom: 32, border: `1px solid ${C.terra}35` }}>
               <Ico.Pin s={13}/>
-              <span style={{ fontSize: 11, color: C.ochreGlow, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Gironde · Landes · Béarn · Pays Basque</span>
+              <span style={{ fontSize: 11, color: C.terra, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase" }}>Gironde · Landes · Béarn · Pays Basque</span>
             </div>
           </FadeIn>
 
           <FadeIn delay={0.12}>
-            <h1 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(48px, 7.5vw, 88px)", fontWeight: 900, color: C.cream, lineHeight: 1.0, marginBottom: 8, maxWidth: 800, letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(40px, 6vw, 72px)", fontWeight: 700, color: C.white, lineHeight: 1.1, marginBottom: 8, maxWidth: 800, letterSpacing: "-0.02em" }}>
               Un peintre qui arrive à l'heure.
             </h1>
-            <p style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(36px, 5.5vw, 68px)", fontWeight: 800, color: C.ochre, lineHeight: 1.1, marginBottom: 32, letterSpacing: "-0.01em" }}>
+            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: C.terra, lineHeight: 1.2, marginBottom: 32, letterSpacing: "-0.01em", fontStyle: "italic" }}>
               Malek le fait lui-même.
             </p>
           </FadeIn>
 
           <FadeIn delay={0.26}>
-            <p style={{ fontSize: 17, color: "rgba(240,235,224,0.78)", lineHeight: 1.7, maxWidth: 580, marginBottom: 40 }}>
+            <p style={{ fontSize: 17, color: "rgba(255,255,255,0.80)", lineHeight: 1.7, maxWidth: 580, marginBottom: 40 }}>
               Artisan peintre en Gironde depuis plus de 10 ans. Du devis à la dernière couche, c'est lui, pas un sous-traitant. Réponse garantie sous 48h.
             </p>
           </FadeIn>
@@ -497,7 +497,7 @@ function PageAccueil({ setPage }) {
                 Demander mon devis →
               </Btn>
             </div>
-            <p style={{ fontSize: 12, color: "rgba(240,235,224,0.35)" }}>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.42)" }}>
               Artisan assuré · Devis gratuit · Sans engagement
             </p>
           </FadeIn>
@@ -505,12 +505,12 @@ function PageAccueil({ setPage }) {
       </section>
 
       {/* ── PROBLÈMES ── */}
-      <section className="sec-p" style={{ padding: "120px 24px 96px", background: C.bg }}>
+      <section className="sec-p" style={{ padding: "120px 24px 96px", background: C.cream }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(32px, 5vw, 60px)", fontWeight: 900, color: C.cream, marginBottom: 56, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(30px, 4.5vw, 54px)", fontWeight: 700, color: C.sage, marginBottom: 56, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
               On sait ce qui{" "}
-              <span style={{ color: C.ochre }}>vous agace.</span>
+              <span style={{ color: C.terra }}>vous agace.</span>
             </h2>
           </FadeIn>
 
@@ -522,33 +522,33 @@ function PageAccueil({ setPage }) {
                   flexWrap: "wrap",
                   gap: "16px 56px",
                   padding: "36px 0",
-                  borderTop: `1px solid ${C.subtle}`,
+                  borderTop: `1px solid ${C.beige}`,
                   alignItems: "flex-start",
                 }}>
                   <h3 style={{
                     flex: "1 1 280px",
-                    fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif",
-                    fontSize: "clamp(26px, 3.5vw, 42px)",
-                    fontWeight: 900,
-                    color: C.cream,
-                    lineHeight: 1.05,
-                    letterSpacing: "-0.02em",
+                    fontFamily: "'Playfair Display', Georgia, serif",
+                    fontSize: "clamp(22px, 3vw, 36px)",
+                    fontWeight: 600,
+                    color: C.sage,
+                    lineHeight: 1.15,
+                    letterSpacing: "-0.01em",
                   }}>
                     {p.title}
                   </h3>
-                  <p style={{ flex: "1 1 280px", fontSize: 16, color: C.muted, lineHeight: 1.75, paddingTop: 4 }}>
+                  <p style={{ flex: "1 1 280px", fontSize: 16, color: C.darkSoft, lineHeight: 1.75, paddingTop: 4 }}>
                     {p.desc}
                   </p>
                 </div>
               </FadeIn>
             ))}
-            <div style={{ borderTop: `1px solid ${C.subtle}` }}/>
+            <div style={{ borderTop: `1px solid ${C.beige}` }}/>
           </div>
         </div>
       </section>
 
       {/* ── À PROPOS ── */}
-      <section className="sec-p-sm" style={{ padding: "80px 24px 120px", background: C.surface }}>
+      <section className="sec-p-sm" style={{ padding: "80px 24px 120px", background: C.warmWhite }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 56, alignItems: "center" }}>
           <FadeIn style={{ flex: "1 1 420px" }}>
             <div style={{ borderRadius: 12, overflow: "hidden", position: "relative" }}>
@@ -563,24 +563,24 @@ function PageAccueil({ setPage }) {
               />
               <div style={{
                 position: "absolute", bottom: 18, left: 18,
-                background: `${C.bg}E8`, backdropFilter: "blur(10px)",
-                borderRadius: 10, padding: "11px 16px", border: `1px solid ${C.subtle}`,
+                background: `${C.warmWhite}E8`, backdropFilter: "blur(10px)",
+                borderRadius: 10, padding: "11px 16px", border: `1px solid ${C.beige}`,
               }}>
-                <div style={{ fontSize: 10, color: C.ochre, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5 }}>Artisan assuré</div>
-                <div style={{ fontSize: 13, color: C.cream, marginTop: 2 }}>Gironde · 10 ans d'expérience</div>
+                <div style={{ fontSize: 10, color: C.terra, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5 }}>Artisan assuré</div>
+                <div style={{ fontSize: 13, color: C.dark, marginTop: 2 }}>Gironde · 10 ans d'expérience</div>
               </div>
             </div>
           </FadeIn>
 
           <FadeIn delay={0.2} style={{ flex: "1 1 340px" }}>
-            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(34px, 5vw, 58px)", fontWeight: 900, color: C.cream, lineHeight: 1.0, marginBottom: 24, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 700, color: C.sage, lineHeight: 1.1, marginBottom: 24, letterSpacing: "-0.02em" }}>
               C'est lui qui{" "}
-              <span style={{ color: C.ochre }}>tient le pinceau.</span>
+              <span style={{ color: C.terra }}>tient le pinceau.</span>
             </h2>
-            <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.8, marginBottom: 16 }}>
+            <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 16 }}>
               Depuis plus de 10 ans en Gironde, Malek fait le travail lui-même. Toujours lui, sur chaque chantier, du premier jour au dernier.
             </p>
-            <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.8, marginBottom: 32 }}>
+            <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 32 }}>
               Vous le rencontrez pour le devis : c'est lui que vous retrouvez sur le chantier. Vous savez à qui vous parlez. Et lui sait ce qu'il a promis.
             </p>
             <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="primary" loc="about">
@@ -615,13 +615,13 @@ function PageAccueil({ setPage }) {
       </section>
 
       {/* ── SERVICES (aperçu) ── */}
-      <section className="sec-p" style={{ padding: "120px 24px 100px", background: C.bg }}>
+      <section className="sec-p" style={{ padding: "120px 24px 100px", background: C.cream }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <FadeIn>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20, marginBottom: 56 }}>
-              <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 900, color: C.cream, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+              <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(28px, 4.5vw, 50px)", fontWeight: 700, color: C.sage, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
                 Ce que Malek{" "}
-                <span style={{ color: C.ochre }}>fait bien.</span>
+                <span style={{ color: C.terra }}>fait bien.</span>
               </h2>
               <Btn onClick={() => { setPage("services"); window.scrollTo({ top: 0 }); }} variant="secondary">
                 Toutes les prestations →
@@ -629,7 +629,7 @@ function PageAccueil({ setPage }) {
             </div>
           </FadeIn>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 2, background: C.subtle }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 2, background: C.beige }}>
             {[
               { icon: <Ico.Home s={22}/>,     title: "Peinture intérieure",    desc: "Murs, plafonds, boiseries. Préparation des supports, enduit si besoin, finition propre." },
               { icon: <Ico.Sun s={22}/>,      title: "Peinture extérieure",    desc: "Façade, volets, sous-faces. Traitement adapté à chaque support. Nettoyage haute pression inclus." },
@@ -638,7 +638,7 @@ function PageAccueil({ setPage }) {
             ].map((s, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div style={{
-                  background: i === 0 ? C.surface : C.bg,
+                  background: i === 0 ? C.warmWhite : C.cream,
                   padding: "40px 32px",
                   height: "100%",
                   position: "relative",
@@ -648,21 +648,21 @@ function PageAccueil({ setPage }) {
                     position: "absolute",
                     bottom: -10,
                     right: 18,
-                    fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif",
+                    fontFamily: "'Playfair Display', Georgia, serif",
                     fontSize: 96,
-                    fontWeight: 900,
-                    color: C.ochre,
-                    opacity: 0.05,
+                    fontWeight: 700,
+                    color: C.terra,
+                    opacity: 0.06,
                     lineHeight: 1,
                     letterSpacing: "-0.04em",
                     userSelect: "none",
                     pointerEvents: "none",
                   }}>{i + 1}</span>
-                  <div style={{ color: C.ochre, marginBottom: 16, position: "relative" }}>{s.icon}</div>
-                  <h3 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(20px, 2vw, 24px)", fontWeight: 900, color: C.cream, marginBottom: 10, letterSpacing: "-0.015em", position: "relative" }}>
+                  <div style={{ color: C.terra, marginBottom: 16, position: "relative" }}>{s.icon}</div>
+                  <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 600, color: C.sage, marginBottom: 10, letterSpacing: "-0.01em", position: "relative" }}>
                     {s.title}
                   </h3>
-                  <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.7, position: "relative" }}>
+                  <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.7, position: "relative" }}>
                     {s.desc}
                   </p>
                 </div>
@@ -673,24 +673,24 @@ function PageAccueil({ setPage }) {
       </section>
 
       {/* ── VALEURS ── */}
-      <section className="sec-p-sm" style={{ padding: "80px 24px 100px", background: C.surface }}>
+      <section className="sec-p-sm" style={{ padding: "80px 24px 100px", background: C.warmWhite }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(30px, 4.5vw, 50px)", fontWeight: 900, color: C.cream, marginBottom: 64, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(28px, 4vw, 46px)", fontWeight: 700, color: C.sage, marginBottom: 64, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
               Ce que vous êtes en droit{" "}
-              <span style={{ color: C.ochre }}>d'exiger.</span>
+              <span style={{ color: C.terra }}>d'exiger.</span>
             </h2>
           </FadeIn>
           <div className="valeurs-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(380px, 100%), 1fr))", gap: "48px 56px" }}>
             {valeurs.map((v, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
-                  <div style={{ color: C.ochre, flexShrink: 0, marginTop: 6 }}>
+                  <div style={{ color: C.terra, flexShrink: 0, marginTop: 6 }}>
                     {v.icon}
                   </div>
                   <div>
-                    <h3 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(21px, 2vw, 24px)", fontWeight: 900, color: C.cream, marginBottom: 8, letterSpacing: "-0.015em" }}>{v.title}</h3>
-                    <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.7 }}>{v.desc}</p>
+                    <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 600, color: C.sage, marginBottom: 8, letterSpacing: "-0.01em" }}>{v.title}</h3>
+                    <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.7 }}>{v.desc}</p>
                   </div>
                 </div>
               </FadeIn>
@@ -700,10 +700,10 @@ function PageAccueil({ setPage }) {
       </section>
 
       {/* ── CTA FINAL ── */}
-      <section className="sec-p" style={{ padding: "100px 24px", background: C.ochre }}>
+      <section className="sec-p" style={{ padding: "100px 24px", background: C.terra }}>
         <FadeIn>
           <div style={{ maxWidth: 620, margin: "0 auto", textAlign: "center" }}>
-            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(36px, 5.5vw, 64px)", fontWeight: 900, color: C.white, marginBottom: 20, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(30px, 5vw, 56px)", fontWeight: 700, color: C.white, marginBottom: 20, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
               Votre chantier mérite un artisan sérieux.
             </h2>
             <p style={{ fontSize: 16, fontWeight: 500, color: C.white, marginBottom: 40 }}>
@@ -716,7 +716,7 @@ function PageAccueil({ setPage }) {
               <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px", boxShadow: "0 2px 16px rgba(0,0,0,0.2)" }} loc="cta_final">
                 <Ico.WhatsApp s={16}/> WhatsApp
               </Btn>
-              <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} style={{ background: "rgba(255,255,255,0.12)", color: C.white, border: "1.5px solid rgba(255,255,255,0.35)", fontSize: 15, padding: "12px 28px", borderRadius: 10, minHeight: 44, cursor: "pointer", fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600 }} loc="cta_final">
+              <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} style={{ background: "rgba(255,255,255,0.15)", color: C.white, border: "1.5px solid rgba(255,255,255,0.35)", fontSize: 15, padding: "12px 28px", borderRadius: 10, minHeight: 44, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontWeight: 600 }} loc="cta_final">
                 Envoyer ma demande →
               </Btn>
             </div>
@@ -765,14 +765,14 @@ function PageServices({ setPage }) {
   ];
 
   return (
-    <div style={{ paddingTop: 68, background: C.bg }}>
-      <section className="sec-p-sm" style={{ background: C.surface, padding: "80px 24px 64px", textAlign: "center", borderBottom: `1px solid ${C.subtle}` }}>
+    <div style={{ paddingTop: 68, background: C.cream }}>
+      <section className="sec-p-sm" style={{ background: C.warmWhite, padding: "80px 24px 64px", textAlign: "center", borderBottom: `1px solid ${C.beige}` }}>
         <FadeIn>
-          <h1 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(40px, 6vw, 72px)", fontWeight: 900, color: C.cream, marginBottom: 14, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(36px, 5.5vw, 64px)", fontWeight: 700, color: C.sage, marginBottom: 14, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
             Ce que Malek fait.{" "}
-            <span style={{ color: C.ochre }}>Et comment.</span>
+            <span style={{ color: C.terra }}>Et comment.</span>
           </h1>
-          <p style={{ fontSize: 16, color: C.muted, maxWidth: 500, margin: "0 auto 28px" }}>
+          <p style={{ fontSize: 16, color: C.darkSoft, maxWidth: 500, margin: "0 auto 28px" }}>
             Particuliers, professionnels, copropriétés : Malek intervient en Gironde et dans toute l'Aquitaine.
           </p>
           <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
@@ -799,20 +799,20 @@ function PageServices({ setPage }) {
                 </div>
                 <div style={{ flex: "1 1 320px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                    <div style={{ width: 48, height: 48, borderRadius: 12, background: `${C.ochre}18`, display: "flex", alignItems: "center", justifyContent: "center", color: C.ochre, flexShrink: 0 }}>
+                    <div style={{ width: 48, height: 48, borderRadius: 12, background: `${C.terra}15`, display: "flex", alignItems: "center", justifyContent: "center", color: C.terra, flexShrink: 0 }}>
                       {s.icon}
                     </div>
                     <div>
-                      <div style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 21, fontWeight: 700, color: C.cream }}>{s.title}</div>
-                      <div style={{ fontSize: 11, color: C.ochre, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2, marginTop: 2 }}>{s.subtitle}</div>
+                      <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 21, fontWeight: 700, color: C.sage }}>{s.title}</div>
+                      <div style={{ fontSize: 11, color: C.terra, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2, marginTop: 2 }}>{s.subtitle}</div>
                     </div>
                   </div>
-                  <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.75, marginBottom: 20 }}>{s.desc}</p>
+                  <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.75, marginBottom: 20 }}>{s.desc}</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {s.items.map((t, j) => (
                       <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
                         <div style={{ flexShrink: 0, marginTop: 1 }}><Ico.Check s={16}/></div>
-                        <span style={{ fontSize: 15, color: C.cream }}>{t}</span>
+                        <span style={{ fontSize: 15, color: C.dark }}>{t}</span>
                       </div>
                     ))}
                   </div>
@@ -823,12 +823,12 @@ function PageServices({ setPage }) {
         </div>
       </section>
 
-      <section className="sec-p-sm" style={{ padding: "80px 24px", background: C.surface, textAlign: "center", borderTop: `1px solid ${C.subtle}` }}>
+      <section className="sec-p-sm" style={{ padding: "80px 24px", background: C.warmWhite, textAlign: "center", borderTop: `1px solid ${C.beige}` }}>
         <FadeIn>
-          <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 900, color: C.cream, marginBottom: 12, letterSpacing: "-0.02em", lineHeight: 1.0 }}>
+          <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(28px, 4vw, 46px)", fontWeight: 700, color: C.sage, marginBottom: 12, letterSpacing: "-0.02em", lineHeight: 1.1 }}>
             Besoin d'un devis ?
           </h2>
-          <p style={{ fontSize: 16, color: C.muted, marginBottom: 32 }}>Gratuit · Réponse sous 48h · Sans engagement</p>
+          <p style={{ fontSize: 16, color: C.sand, marginBottom: 32 }}>Gratuit · Réponse sous 48h · Sans engagement</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
             <Btn href={PHONE} variant="primary" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta"><Ico.Phone s={16}/> Appeler Malek</Btn>
             <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta"><Ico.WhatsApp s={16}/> WhatsApp</Btn>
@@ -851,38 +851,38 @@ function PageContact() {
 
   const inp = {
     width: "100%", padding: "13px 16px", borderRadius: 10,
-    background: C.surface, border: `1px solid ${C.subtle}`,
-    fontSize: 15, color: C.cream, outline: "none",
-    fontFamily: "'Bricolage Grotesque', sans-serif",
+    background: C.warmWhite, border: `1px solid ${C.beige}`,
+    fontSize: 15, color: C.dark, outline: "none",
+    fontFamily: "'DM Sans', sans-serif",
     boxSizing: "border-box",
   };
   const lab = {
     display: "block", fontSize: 11, fontWeight: 600,
-    color: C.muted, marginBottom: 6,
+    color: C.sand, marginBottom: 6,
     textTransform: "uppercase", letterSpacing: 0.8,
   };
 
   return (
-    <div style={{ paddingTop: 68, background: C.bg, minHeight: "100vh" }}>
+    <div style={{ paddingTop: 68, background: C.cream, minHeight: "100vh" }}>
       <section style={{ padding: "64px 24px 100px" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 56, alignItems: "flex-start" }}>
 
           {/* Formulaire */}
           <FadeIn style={{ flex: "1 1 440px" }}>
-            <h1 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: "clamp(32px, 4.5vw, 52px)", fontWeight: 900, color: C.cream, marginTop: 0, marginBottom: 8, lineHeight: 1.0, letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(30px, 4vw, 48px)", fontWeight: 700, color: C.sage, marginTop: 0, marginBottom: 8, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
               Décrivez votre{" "}
-              <span style={{ color: C.ochre }}>chantier.</span>
+              <span style={{ color: C.terra }}>chantier.</span>
             </h1>
-            <p style={{ fontSize: 16, color: C.muted, marginBottom: 32 }}>
+            <p style={{ fontSize: 16, color: C.darkSoft, marginBottom: 32 }}>
               Malek vous rappelle sous 48h. Si c'est urgent, appelez directement au{" "}
-              <a href={PHONE} style={{ color: C.cream, textDecoration: "none", fontWeight: 600 }}>{PHONE_DISPLAY}</a>.
+              <a href={PHONE} style={{ color: C.dark, textDecoration: "none", fontWeight: 600 }}>{PHONE_DISPLAY}</a>.
             </p>
 
             {state.succeeded ? (
-              <div style={{ background: C.surface, borderRadius: 12, padding: "48px 32px", textAlign: "center", border: `1px solid ${C.subtle}` }}>
-                <div style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 56, color: C.ochre, marginBottom: 16, lineHeight: 1 }}>✓</div>
-                <h3 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 26, color: C.cream, marginBottom: 12 }}>Reçu.</h3>
-                <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.7 }}>
+              <div style={{ background: C.warmWhite, borderRadius: 12, padding: "48px 32px", textAlign: "center", border: `1px solid ${C.beige}` }}>
+                <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 56, color: C.terra, marginBottom: 16, lineHeight: 1 }}>✓</div>
+                <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 26, fontWeight: 600, color: C.sage, marginBottom: 12 }}>Reçu.</h3>
+                <p style={{ fontSize: 15, color: C.sand, lineHeight: 1.7 }}>
                   Malek vous rappelle dans les 48h.<br/>Besoin d'une réponse plus rapide ?
                 </p>
                 <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 24, flexWrap: "wrap" }}>
@@ -932,20 +932,20 @@ function PageContact() {
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                     width: "100%", padding: "15px",
                     borderRadius: 10,
-                    background: state.submitting ? C.ochreDim : C.ochre,
-                    color: C.white, fontSize: 16, fontWeight: 700,
+                    background: state.submitting ? `${C.terra}99` : C.terra,
+                    color: C.white, fontSize: 16, fontWeight: 600,
                     cursor: state.submitting ? "not-allowed" : "pointer",
                     border: "none",
-                    fontFamily: "'Bricolage Grotesque', sans-serif",
+                    fontFamily: "'DM Sans', sans-serif",
                     minHeight: 52,
-                    boxShadow: `0 4px 20px ${C.ochre}38`,
+                    boxShadow: `0 4px 20px ${C.terra}35`,
                     transition: "background 0.2s",
                   }}
                 >
                   <Ico.Mail s={18}/>
                   {state.submitting ? "Envoi…" : "Envoyer ma demande"}
                 </button>
-                <p style={{ fontSize: 12, color: C.muted, textAlign: "center", marginTop: 10 }}>
+                <p style={{ fontSize: 12, color: C.sand, textAlign: "center", marginTop: 10 }}>
                   Sans engagement · Réponse sous 48h
                 </p>
               </form>
@@ -954,16 +954,16 @@ function PageContact() {
 
           {/* Coordonnées */}
           <FadeIn delay={0.2} style={{ flex: "1 1 280px" }}>
-            <h2 style={{ fontFamily: "'Big Shoulders Display', 'Arial Narrow', sans-serif", fontSize: 22, fontWeight: 700, color: C.cream, marginBottom: 24 }}>
+            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 22, fontWeight: 700, color: C.sage, marginBottom: 24 }}>
               Contacter Malek
             </h2>
 
-            <a href={PHONE} onClick={() => trackLead("phone", "contact")} style={{ display: "flex", alignItems: "center", gap: 14, padding: "17px", background: C.ochre, borderRadius: 12, marginBottom: 10, textDecoration: "none", boxShadow: `0 4px 16px ${C.ochre}28` }}>
+            <a href={PHONE} onClick={() => trackLead("phone", "contact")} style={{ display: "flex", alignItems: "center", gap: 14, padding: "17px", background: C.terra, borderRadius: 12, marginBottom: 10, textDecoration: "none", boxShadow: `0 4px 16px ${C.terra}30` }}>
               <div style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: C.white, flexShrink: 0 }}>
                 <Ico.Phone s={20}/>
               </div>
               <div>
-                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2 }}>Appeler maintenant</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2 }}>Appeler maintenant</div>
                 <div style={{ fontSize: 17, fontWeight: 700, color: C.white, marginTop: 2 }}>{PHONE_DISPLAY}</div>
               </div>
             </a>
@@ -973,18 +973,18 @@ function PageContact() {
                 <Ico.WhatsApp s={20}/>
               </div>
               <div>
-                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2 }}>WhatsApp</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2 }}>WhatsApp</div>
                 <div style={{ fontSize: 14, fontWeight: 600, color: C.white }}>Envoyer un message</div>
               </div>
             </a>
 
-            <a href={"mailto:"+EMAIL} style={{ display: "flex", alignItems: "center", gap: 14, padding: "15px 17px", background: C.surface, borderRadius: 12, marginBottom: 10, textDecoration: "none", border: `1px solid ${C.subtle}` }}>
-              <div style={{ width: 44, height: 44, borderRadius: 10, background: `${C.ochre}18`, display: "flex", alignItems: "center", justifyContent: "center", color: C.ochre, flexShrink: 0 }}>
+            <a href={"mailto:"+EMAIL} style={{ display: "flex", alignItems: "center", gap: 14, padding: "15px 17px", background: C.warmWhite, borderRadius: 12, marginBottom: 10, textDecoration: "none", border: `1px solid ${C.beige}` }}>
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: `${C.terra}15`, display: "flex", alignItems: "center", justifyContent: "center", color: C.terra, flexShrink: 0 }}>
                 <Ico.Mail s={20}/>
               </div>
               <div>
-                <div style={{ fontSize: 10, color: C.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2 }}>Email</div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: C.cream }}>{EMAIL}</div>
+                <div style={{ fontSize: 10, color: C.sand, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2 }}>Email</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: C.dark }}>{EMAIL}</div>
               </div>
             </a>
 
@@ -993,11 +993,11 @@ function PageContact() {
                 [<Ico.Pin s={17}/>, "Zone", "Toute l'Aquitaine"],
                 [<Ico.Clock s={17}/>, "Horaires", "Lun–Sam · 8h–19h"],
               ].map(([icon, label, val], i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px", background: C.surface, borderRadius: 12, border: `1px solid ${C.subtle}` }}>
-                  <div style={{ color: C.ochre, flexShrink: 0 }}>{icon}</div>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px", background: C.warmWhite, borderRadius: 12, border: `1px solid ${C.beige}` }}>
+                  <div style={{ color: C.terra, flexShrink: 0 }}>{icon}</div>
                   <div>
-                    <div style={{ fontSize: 10, color: C.muted, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 600 }}>{label}</div>
-                    <div style={{ fontSize: 13, color: C.cream, fontWeight: 600, marginTop: 1 }}>{val}</div>
+                    <div style={{ fontSize: 10, color: C.sand, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 600 }}>{label}</div>
+                    <div style={{ fontSize: 13, color: C.dark, fontWeight: 600, marginTop: 1 }}>{val}</div>
                   </div>
                 </div>
               ))}
@@ -1030,7 +1030,7 @@ function App() {
   }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="app-root" style={{ background: C.bg, minHeight: "100vh", paddingBottom: 70 }}>
+    <div className="app-root" style={{ background: C.cream, minHeight: "100vh", paddingBottom: 70 }}>
       <Header page={page} setPage={setPage}/>
       <main>
         {page === "accueil"  && <PageAccueil  setPage={setPage}/>}

@@ -1,13 +1,13 @@
 :root {
-  --ocre: #C8783A;
+  --ocre: #C4813A;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: #17140F;
-  color: #F0EBE0;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  background: #FAF7F2;
+  color: #1A1A1A;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   line-height: 1.7;
   letter-spacing: 0.012em;
@@ -22,7 +22,7 @@ p {
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  font-family: 'Playfair Display', Georgia, serif;
   text-wrap: balance;
   font-optical-sizing: auto;
   letter-spacing: -0.01em;
@@ -83,7 +83,7 @@ a { color: inherit; }
 .form-input:focus-visible {
   outline: none !important;
   border-color: var(--ocre) !important;
-  box-shadow: 0 0 0 3px rgba(200, 120, 58, 0.18) !important;
+  box-shadow: 0 0 0 3px rgba(196, 129, 58, 0.18) !important;
 }
 
 /* ── FadeIn entrance animation ── */
@@ -96,8 +96,8 @@ a { color: inherit; }
   animation: fadeInUp 0.55s cubic-bezier(0, 0, 0.2, 1) backwards;
 }
 
-/* Placeholder contrast — passes WCAG AA on #211E19 */
-::placeholder { color: rgba(240, 235, 224, 0.50); }
+/* Placeholder contrast — passes WCAG AA on #FFFDF9 */
+::placeholder { color: rgba(26, 26, 26, 0.38); }
 
 /* ── Interaction states ── */
 /* Transition for elements without inline transition */
