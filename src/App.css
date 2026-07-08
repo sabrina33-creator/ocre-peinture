@@ -7,7 +7,7 @@
 body {
   background: #FAF7F2;
   color: #1A1A1A;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem;
   line-height: 1.7;
   letter-spacing: 0.012em;
@@ -22,7 +22,7 @@ p {
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Fraunces', Georgia, serif;
   text-wrap: balance;
   font-optical-sizing: auto;
   letter-spacing: -0.01em;
