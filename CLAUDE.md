@@ -29,7 +29,8 @@
 
 ```
 src/
-├── App.js          ← composant principal, toutes les sections
+├── App.js          ← composant principal, toutes les sections + routes (react-router-dom)
+├── Seo.jsx         ← title/description/canonical dynamiques par page (ajouté 23/09/2026)
 ├── App.css         ← styles globaux, tokens CSS
 ├── analytics.js    ← wrapper trackEvent GA4
 ├── index.css       ← reset + base
@@ -44,8 +45,12 @@ public/
 ├── index.html      ← meta SEO, GA4, JSON-LD, Google Fonts
 ├── og-image.jpg    ← copie de hero.jpg pour og:image (ajouté 08/07/2026)
 ├── ocrelogo.png    ← logo principal
+├── sitemap.xml     ← 3 URLs (/, /services, /contact) depuis 23/09/2026
+├── _redirects      ← fallback SPA Netlify (ajouté 23/09/2026, indispensable pour /services et /contact)
 └── favicon.png
 ```
+
+**Routes (depuis le 23/09/2026) :** `/` (Accueil), `/services`, `/contact` — voir section SEO / INDEXATION GOOGLE ci-dessous pour le contexte.
 
 ---
 
@@ -139,6 +144,31 @@ public/
 - Remplacer le noeud Webhook par WhatsApp Business (Meta) ou Twilio
 - Option recommandée pour commencer : Twilio sandbox (gratuit, scan QR personnel)
 - Tout le reste du workflow reste intact
+
+---
+
+## SEO / INDEXATION GOOGLE
+
+### 2026-09-23 — Migration vers de vraies URLs par page + indexation initiale
+
+**Constat de départ :** le site n'avait aucun routing — "Accueil", "Services", "Devis" étaient de simples changements d'état React (`setPage(...)`) sans jamais changer l'URL affichée. Conséquence : Google Search Console ne pouvait connaître/indexer qu'une seule URL (`https://ocre-peinture.fr/`), impossible de faire remonter directement quelqu'un sur "Services" ou "Devis" depuis une recherche, et impossible de demander l'indexation séparée de ces sections. Détecté en voulant indexer le site (l'utilisatrice a remarqué que 3 sections existaient visuellement mais que l'URL ne changeait jamais).
+
+**Migration effectuée (commit `768d859`) :**
+- `react-router-dom` (^7.17.0) ajouté en dépendance
+- `App.js` : `BrowserRouter` + `Routes`/`Route` avec 3 vraies routes : `/`, `/services`, `/contact`. Tous les `setPage(...)` remplacés par `navigate(...)` (`useNavigate`/`useLocation`), pattern identique à celui déjà utilisé sur le projet Loya (`essaloc`)
+- `src/Seo.jsx` créé — met à jour `title`/`meta description`/`canonical`/`og:*` au montage de chaque page via `document.querySelector` (pas de dépendance type `react-helmet`, même pattern que celui déjà validé sur `flow-sublim-net`)
+- `public/_redirects` ajouté (`/* /index.html 200`) — indispensable sur Netlify pour que `/services` et `/contact` répondent en 200 au lieu d'un 404 (sans ce fichier, seule `/` aurait fonctionné)
+- `public/sitemap.xml` mis à jour : 3 URLs au lieu d'une seule
+
+**Vérification avant de considérer que c'était fait** : `npm run build` sans erreur, test local (`serve -s build`) confirmant un 200 sur les 3 routes, puis en production avec **Chrome headless réel** (pas seulement `curl`/`WebFetch`, qui n'exécutent pas le JS et auraient montré à tort le même title partout) : title et canonical bien distincts et corrects sur `/services` ("Nos prestations — ...") et `/contact` ("Devis gratuit — ...").
+
+**Indexation Google Search Console :**
+- Propriété `https://ocre-peinture.fr/` déjà existante et validée (vérification automatique)
+- `sitemap.xml` soumis — premier essai "Impossible de récupérer" (délai de traitement normal, pas une erreur — confirmé par `curl` montrant un 200/XML valide), résolu après nouvelle soumission
+- `/` déjà indexée automatiquement par Google avant même la demande manuelle
+- Indexation manuelle demandée via "Inspection de l'URL" pour les 2 nouvelles pages : `/services` et `/contact`
+
+**Prochaine étape :** revérifier le statut d'indexation de `/services` et `/contact` dans Search Console → Pages, d'ici 2-3 jours.
 
 ---
 
