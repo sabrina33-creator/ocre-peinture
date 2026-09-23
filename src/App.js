@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "@formspree/react";
 import "./App.css";
 import { trackPageView, trackLead } from "./analytics";
+import Seo from "./Seo";
 import Malek from "./Malek.jpeg";
 import photopeinture from "./photopeinture.jpg";
 import photopeinture1 from "./photopeinture1.jpg";
@@ -220,9 +222,11 @@ function Btn({ href, onClick, children, variant = "primary", style = {}, loc }) 
 }
 
 // ══════════ HEADER ══════════
-function Header({ page, setPage }) {
+function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -230,13 +234,14 @@ function Header({ page, setPage }) {
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  const goTo = (p) => { setPage(p); setMenuOpen(false); window.scrollTo({ top: 0 }); };
+  const goTo = (p) => { navigate(p === "accueil" ? "/" : "/" + p); setMenuOpen(false); window.scrollTo({ top: 0 }); };
   const links = [
     { id: "accueil",  label: "Accueil"  },
     { id: "services", label: "Services" },
     { id: "contact",  label: "Devis"    },
   ];
-  const transparent = page === "accueil" && !scrolled;
+  const isActive = (id) => location.pathname === (id === "accueil" ? "/" : "/" + id);
+  const transparent = location.pathname === "/" && !scrolled;
 
   return (
     <header style={{
@@ -265,11 +270,11 @@ function Header({ page, setPage }) {
             <button
               key={n.id}
               onClick={() => goTo(n.id)}
-              aria-current={page === n.id ? "page" : undefined}
+              aria-current={isActive(n.id) ? "page" : undefined}
               style={{
                 fontSize: 14, fontWeight: 500, cursor: "pointer", background: "none", border: "none",
-                color: page === n.id ? C.terra : (transparent ? "rgba(255,255,255,0.75)" : C.sand),
-                borderBottom: page === n.id ? `1.5px solid ${C.terra}` : "1.5px solid transparent",
+                color: isActive(n.id) ? C.terra : (transparent ? "rgba(255,255,255,0.75)" : C.sand),
+                borderBottom: isActive(n.id) ? `1.5px solid ${C.terra}` : "1.5px solid transparent",
                 padding: "4px 0", fontFamily: "'Figtree', sans-serif",
                 transition: "color 0.2s", minHeight: 44,
               }}
@@ -304,7 +309,7 @@ function Header({ page, setPage }) {
               onClick={() => goTo(n.id)}
               style={{
                 fontFamily: "'Fraunces', Georgia, serif", fontSize: 38, fontWeight: 700,
-                color: page === n.id ? C.terra : C.sage,
+                color: isActive(n.id) ? C.terra : C.sage,
                 background: "none", border: "none", cursor: "pointer",
                 padding: "10px 0", textAlign: "left", minHeight: 60,
               }}
@@ -337,7 +342,8 @@ function Header({ page, setPage }) {
 }
 
 // ══════════ STICKY CTA MOBILE ══════════
-function StickyCTA({ setPage }) {
+function StickyCTA() {
+  const navigate = useNavigate();
   return (
     <>
       <div
@@ -356,7 +362,7 @@ function StickyCTA({ setPage }) {
         <Btn href={WHATSAPP} variant="whatsapp" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9 }} loc="sticky">
           <Ico.WhatsApp s={14}/> WhatsApp
         </Btn>
-        <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9, border: `1.5px solid ${C.beige}` }} loc="sticky">
+        <Btn onClick={() => { navigate("/contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ flex: 1, padding: "12px 6px", fontSize: 13, borderRadius: 9, border: `1.5px solid ${C.beige}` }} loc="sticky">
           <Ico.Mail s={14}/> Devis
         </Btn>
       </div>
@@ -366,8 +372,9 @@ function StickyCTA({ setPage }) {
 }
 
 // ══════════ FOOTER ══════════
-function Footer({ setPage }) {
-  const goTo = (p) => { setPage(p); window.scrollTo({ top: 0 }); };
+function Footer() {
+  const navigate = useNavigate();
+  const goTo = (p) => { navigate(p === "accueil" ? "/" : "/" + p); window.scrollTo({ top: 0 }); };
   return (
     <footer style={{ background: C.warmWhite, borderTop: `1px solid ${C.beige}`, padding: "64px 24px 40px" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -421,7 +428,8 @@ function Footer({ setPage }) {
 }
 
 // ══════════ PAGE ACCUEIL ══════════
-function PageAccueil({ setPage }) {
+function PageAccueil() {
+  const navigate = useNavigate();
   const problemes = [
     {
       title: "L'artisan qui disparaît",
@@ -450,6 +458,11 @@ function PageAccueil({ setPage }) {
 
   return (
     <div>
+      <Seo
+        title="Ocré, peintre professionnel en Aquitaine · Malek"
+        description="Malek, artisan peintre en Gironde depuis 10 ans. Peinture intérieure, extérieure, ravalement de façade. Devis gratuit, réponse sous 48h, toute l'Aquitaine."
+        path=""
+      />
       {/* ── HERO ── */}
       <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0 }}>
@@ -493,7 +506,7 @@ function PageAccueil({ setPage }) {
               <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px" }} loc="hero">
                 <Ico.WhatsApp s={16}/> WhatsApp
               </Btn>
-              <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="ghost" style={{ fontSize: 15, padding: "12px 28px" }} loc="hero">
+              <Btn onClick={() => { navigate("/contact"); window.scrollTo({ top: 0 }); }} variant="ghost" style={{ fontSize: 15, padding: "12px 28px" }} loc="hero">
                 Demander mon devis →
               </Btn>
             </div>
@@ -583,7 +596,7 @@ function PageAccueil({ setPage }) {
             <p style={{ fontSize: 16, color: C.darkSoft, lineHeight: 1.8, marginBottom: 32 }}>
               Vous le rencontrez pour le devis : c'est lui que vous retrouvez sur le chantier. Vous savez à qui vous parlez. Et lui sait ce qu'il a promis.
             </p>
-            <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="primary" loc="about">
+            <Btn onClick={() => { navigate("/contact"); window.scrollTo({ top: 0 }); }} variant="primary" loc="about">
               Demander mon devis →
             </Btn>
           </FadeIn>
@@ -623,7 +636,7 @@ function PageAccueil({ setPage }) {
                 Ce que Malek{" "}
                 <span style={{ color: C.terra }}>fait bien.</span>
               </h2>
-              <Btn onClick={() => { setPage("services"); window.scrollTo({ top: 0 }); }} variant="secondary">
+              <Btn onClick={() => { navigate("/services"); window.scrollTo({ top: 0 }); }} variant="secondary">
                 Toutes les prestations →
               </Btn>
             </div>
@@ -716,7 +729,7 @@ function PageAccueil({ setPage }) {
               <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px", boxShadow: "0 2px 16px rgba(0,0,0,0.2)" }} loc="cta_final">
                 <Ico.WhatsApp s={16}/> WhatsApp
               </Btn>
-              <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} style={{ background: "rgba(255,255,255,0.15)", color: C.white, border: "1.5px solid rgba(255,255,255,0.35)", fontSize: 15, padding: "12px 28px", borderRadius: 10, minHeight: 44, cursor: "pointer", fontFamily: "'Figtree', sans-serif", fontWeight: 600 }} loc="cta_final">
+              <Btn onClick={() => { navigate("/contact"); window.scrollTo({ top: 0 }); }} style={{ background: "rgba(255,255,255,0.15)", color: C.white, border: "1.5px solid rgba(255,255,255,0.35)", fontSize: 15, padding: "12px 28px", borderRadius: 10, minHeight: 44, cursor: "pointer", fontFamily: "'Figtree', sans-serif", fontWeight: 600 }} loc="cta_final">
                 Envoyer ma demande →
               </Btn>
             </div>
@@ -728,7 +741,8 @@ function PageAccueil({ setPage }) {
 }
 
 // ══════════ PAGE SERVICES ══════════
-function PageServices({ setPage }) {
+function PageServices() {
+  const navigate = useNavigate();
   const services = [
     {
       icon: <Ico.Home s={26}/>,
@@ -766,6 +780,11 @@ function PageServices({ setPage }) {
 
   return (
     <div style={{ paddingTop: 68, background: C.cream }}>
+      <Seo
+        title="Nos prestations — Peinture intérieure, extérieure, façade | Ocré"
+        description="Peinture intérieure, extérieure, ravalement de façade, chantiers professionnels, remise en état. Malek intervient en Gironde et dans toute l'Aquitaine."
+        path="/services"
+      />
       <section className="sec-p-sm" style={{ background: C.warmWhite, padding: "80px 24px 64px", textAlign: "center", borderBottom: `1px solid ${C.beige}` }}>
         <FadeIn>
           <h1 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: "clamp(36px, 5.5vw, 64px)", fontWeight: 700, color: C.sage, marginBottom: 14, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
@@ -832,7 +851,7 @@ function PageServices({ setPage }) {
           <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
             <Btn href={PHONE} variant="primary" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta"><Ico.Phone s={16}/> Appeler Malek</Btn>
             <Btn href={WHATSAPP} variant="whatsapp" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta"><Ico.WhatsApp s={16}/> WhatsApp</Btn>
-            <Btn onClick={() => { setPage("contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta">
+            <Btn onClick={() => { navigate("/contact"); window.scrollTo({ top: 0 }); }} variant="secondary" style={{ fontSize: 15, padding: "14px 28px" }} loc="services_cta">
               <Ico.Mail s={16}/> Formulaire de devis
             </Btn>
           </div>
@@ -864,6 +883,11 @@ function PageContact() {
 
   return (
     <div style={{ paddingTop: 68, background: C.cream, minHeight: "100vh" }}>
+      <Seo
+        title="Devis gratuit — Peinture à Bordeaux et en Aquitaine | Ocré"
+        description="Décrivez votre chantier, Malek vous rappelle sous 48h. Devis gratuit et sans engagement pour vos travaux de peinture en Gironde et en Aquitaine."
+        path="/contact"
+      />
       <section style={{ padding: "64px 24px 100px" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 56, alignItems: "flex-start" }}>
 
@@ -1021,25 +1045,35 @@ function PageContact() {
 }
 
 // ══════════ APP ══════════
-function App() {
-  const [page, setPage] = useState("accueil");
+function AppContent() {
+  const location = useLocation();
 
   useEffect(() => {
-    const names = { accueil: "Accueil", services: "Services", contact: "Devis" };
-    trackPageView(names[page] || page);
-  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+    const names = { "/": "Accueil", "/services": "Services", "/contact": "Devis" };
+    trackPageView(names[location.pathname] || location.pathname);
+  }, [location.pathname]);
 
   return (
     <div className="app-root" style={{ background: C.cream, minHeight: "100vh", paddingBottom: 70 }}>
-      <Header page={page} setPage={setPage}/>
+      <Header/>
       <main>
-        {page === "accueil"  && <PageAccueil  setPage={setPage}/>}
-        {page === "services" && <PageServices setPage={setPage}/>}
-        {page === "contact"  && <PageContact/>}
+        <Routes>
+          <Route path="/" element={<PageAccueil/>}/>
+          <Route path="/services" element={<PageServices/>}/>
+          <Route path="/contact" element={<PageContact/>}/>
+        </Routes>
       </main>
-      <Footer setPage={setPage}/>
-      <StickyCTA setPage={setPage}/>
+      <Footer/>
+      <StickyCTA/>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent/>
+    </BrowserRouter>
   );
 }
 
